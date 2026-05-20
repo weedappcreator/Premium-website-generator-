@@ -4,6 +4,10 @@
 			"path": "."
 		},
 		{
+			"path": "website-generator",
+			"name": "Website Generator"
+		},
+		{
 			"path": "../_Projects/uigen"
 		},
 		{
