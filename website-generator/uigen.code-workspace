@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "website-generator",
+			"name": "Website Generator"
+		},
+		{
+			"path": "../_Projects/uigen"
+		},
+		{
+			"path": "../_Projects/limpiacsv"
+		}
+	],
+	"settings": {}
+}

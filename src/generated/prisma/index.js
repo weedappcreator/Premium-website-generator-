@@ -146,7 +146,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/macbookpro/Downloads/uigen/src/generated/prisma",
+      "value": "/Users/macbookpro/Downloads/Projects/uigen/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -160,7 +160,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/macbookpro/Downloads/uigen/prisma/schema.prisma",
+    "sourceFilePath": "/Users/macbookpro/Downloads/Projects/uigen/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -174,6 +174,7 @@ const config = {
     "db"
   ],
   "activeProvider": "sqlite",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

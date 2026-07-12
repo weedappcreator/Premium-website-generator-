@@ -7,6 +7,7 @@
     "dev:daemon": "NODE_OPTIONS='--require ./node-compat.cjs' next dev --turbopack > logs.txt 2>&1 & echo 'Server started, writing logs to logs.txt'",
     "dev:claude": "LLM_PROVIDER=anthropic npm run dev",
     "dev:ollama": "LLM_PROVIDER=ollama npm run dev",
+    "dev:gemini": "LLM_PROVIDER=gemini npm run dev",
     "dev:opencode": "LLM_PROVIDER=opencode npm run dev",
     "build": "NEXT_WEBPACK_5_FORCE_WASM=0 next build",
     "build:local": "NODE_OPTIONS='--require ./node-compat.cjs' next build",
@@ -20,7 +21,11 @@
     "db:seed": "tsx prisma/seed.ts",
     "ollama:start": "ollama serve",
     "ollama:pull": "ollama pull",
-    "models": "opencode models"
+    "models": "opencode models",
+    "templates:list": "node src/lib/template-loader.js list",
+    "templates:search": "node src/lib/template-loader.js search",
+    "templates:fetch": "node src/lib/template-loader.js fetch",
+    "templates:clean": "rm -rf .template-cache"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts",
@@ -30,7 +35,7 @@
     "@ai-sdk/anthropic": "1.2.12",
     "@ai-sdk/google": "^3.0.64",
     "@ai-sdk/openai": "^3.0.52",
-    "@babel/standalone": "^7.27.6",
+    "@babel/standalone": "^7.29.7",
     "@higgsfield/client": "^0.2.1",
     "@monaco-editor/react": "^4.7.0",
     "@opencode-ai/sdk": "^1.4.2",
@@ -43,7 +48,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",
-    "@supabase/supabase-js": "^2.105.4",
+    "@supabase/supabase-js": "^2.110.2",
     "@tailwindcss/typography": "^0.5.16",
     "ai": "4.3.16",
     "bcrypt": "^6.0.0",
@@ -81,7 +86,7 @@
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "tw-animate-css": "^1.3.4",
-    "typescript": "^5",
+    "typescript": "5.9.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"
   }

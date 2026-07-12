@@ -51,5 +51,22 @@ coverage/
 .vercel
 .env*.local
 
+# Template cache (fetched on-demand from GitHub)
+.template-cache/
+
 # Local Netlify folder
 .netlify
+
+# Large reference repos (node_modules inside them)
+shadcn-ui/node_modules/
+ui-ux-pro-max-skill/node_modules/
+impeccable/node_modules/
+
+# Generated
+*.db
+*.db-journal
+logs.txt
+# Generated files
+.generated/
+*.db
+*.db-journal

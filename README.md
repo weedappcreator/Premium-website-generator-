@@ -1,67 +1,93 @@
-# UIGen
+# Workspace — Multi-Project Environment
 
-AI-powered React component generator with live preview.
+This workspace contains **independent projects**, each with its own codebase, configuration, and LLM provider.
 
-## Prerequisites
+## Projects
 
-- Node.js 18+
-- npm
-
-## Setup
-
-1. **Optional** Edit `.env` and add your Anthropic API key:
-
-```
-ANTHROPIC_API_KEY=your-api-key-here
-```
-
-The project will run without an API key. Rather than using a LLM to generate components, static code will be returned instead.
-
-2. Install dependencies and initialize database
+### 1. **website-generator**
+AI-powered website builder. Generate, edit, and deploy websites via LLM chat.
 
 ```bash
-npm run setup
+cd website-generator
+npm install
+npm run dev              # with default LLM_PROVIDER
+npm run dev:opencode    # Force OpenCode (175+ models)
+npm run dev:ollama      # Force Ollama (local models)
+npm run dev:claude      # Force Claude
 ```
 
-This command will:
-
-- Install all dependencies
-- Generate Prisma client
-- Run database migrations
-
-## Running the Application
-
-### Development
+### 2. **marketing-agency** *(Coming)*
+Marketing automation and campaign builder.
 
 ```bash
+cd marketing-agency
+npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+### 3. **automations** *(Coming)*
+Workflow automation and task scheduling.
 
-## Usage
+```bash
+cd automations
+npm install
+npm run dev
+```
 
-1. Sign up or continue as anonymous user
-2. Describe the React component you want to create in the chat
-3. View generated components in real-time preview
-4. Switch to Code view to see and edit the generated files
-5. Continue iterating with the AI to refine your components
+---
 
-## Features
+## Working with Any LLM
 
-- AI-powered component generation using Claude
-- Live preview with hot reload
-- Virtual file system (no files written to disk)
-- Syntax highlighting and code editor
-- Component persistence for registered users
-- Export generated code
+Each project is **LLM-agnostic**. Use any provider:
 
-## Tech Stack
+```bash
+# OpenCode (Claude, GPT, Gemini, DeepSeek, etc.)
+LLM_PROVIDER=opencode npm run dev
 
-- Next.js 15 with App Router
-- React 19
-- TypeScript
-- Tailwind CSS v4
-- Prisma with SQLite
-- Anthropic Claude AI
-- Vercel AI SDK
+# Ollama (local models)
+LLM_PROVIDER=ollama npm run dev
+
+# Claude direct API
+LLM_PROVIDER=claude npm run dev
+
+# Fallback to mock if no keys
+npm run dev
+```
+
+Edit `.env` or `.env.local` in each project to set `LLM_PROVIDER` and API keys.
+
+---
+
+## Switching Projects
+
+To work on a specific project from Claude Code:
+
+```
+"Switch to website-generator and add feature X"
+"Open marketing-agency and update the dashboard"
+"Go to automations and fix the scheduler"
+```
+
+I'll change context to that project's directory and work on it independently.
+
+---
+
+## Project Independence
+
+Each project is:
+- ✅ **Separate git repository** (own `.git/` history)
+- ✅ **Own dependencies** (`node_modules/`)
+- ✅ **Own database** (`prisma/` + SQLite)
+- ✅ **Own configuration** (`.env`, `.env.local`)
+- ✅ **Own deployment** (can deploy separately)
+
+**Changes in one project never affect others.**
+
+---
+
+## Getting Started
+
+1. **website-generator** is ready → `cd website-generator && npm install && npm run dev`
+2. **marketing-agency** & **automations** are templates → set them up when needed
+
+Each has a README with detailed setup instructions.

@@ -8,15 +8,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/hr-dashboard',
-        permanent: false,
-      },
-    ];
-  },
 };
 
 export default nextConfig;
