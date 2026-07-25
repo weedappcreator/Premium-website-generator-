@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
+import { Syne, Inter, JetBrains_Mono } from "next/font/google";
 
-const cormorant = Cormorant_Garamond({
+const syne = Syne({
   subsets: ["latin"],
-  weight: ["300", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -40,7 +39,7 @@ export default function WeedKerwingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${cormorant.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <div className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       {children}
     </div>
   );

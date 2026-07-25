@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useReducedMotion,
@@ -17,14 +17,13 @@ import {
   Instagram,
   Menu,
   X,
-  Minus,
 } from "lucide-react";
 import Image from "next/image";
 
 /* ═══════════════════════════════════════════════════════════════════
    DESIGN SYSTEM — Weed Kerwing Portfolio
-   Philosophy: Editorial precision meets digital craft.
-   Fonts: Cormorant Garamond (display) + Inter (UI) + JetBrains Mono (numbers)
+   Philosophy: Restraint and precision over decoration and motion.
+   Fonts: Syne (display) + Inter (UI) + JetBrains Mono (numbers)
    ═══════════════════════════════════════════════════════════════════ */
 
 const PALETTE = {
@@ -149,19 +148,6 @@ function GrainOverlay() {
 }
 
 /* ─── VIGNETTE ─── */
-
-function Vignette() {
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[9998]"
-      style={{
-        background:
-          "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(6,6,6,0.55) 100%)",
-      }}
-    />
-  );
-}
 
 /* ─── LINE REVEAL ─── */
 
@@ -427,172 +413,125 @@ function Navbar() {
 
 /* ─── HERO ─── */
 
-function KineticName({ word, delay = 0, italic = false }: { word: string; delay?: number; italic?: boolean }) {
-  const reduce = useReducedMotion();
-  const chars = word.split("");
-  return (
-    <span style={{ display: "inline-block", fontStyle: italic ? "italic" : "normal" }}>
-      {chars.map((char, i) => (
-        <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}>
-          <motion.span
-            style={{ display: "inline-block", color: char === "." ? PALETTE.text.accent : PALETTE.text.primary }}
-            initial={reduce ? false : { y: "115%", rotateX: 25 }}
-            animate={{ y: "0%", rotateX: 0 }}
-            transition={{ duration: 1.1, delay: delay + i * 0.045, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {char}
-          </motion.span>
-        </span>
-      ))}
-    </span>
-  );
-}
-
-function HeroStat({ value, label, style, delay = 0 }: {
-  value: string; label: string; style: React.CSSProperties; delay?: number;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      style={{ position: "absolute", ...style, display: "flex", flexDirection: "column", gap: 4, zIndex: 10 }}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <span style={{ fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", fontWeight: 500, letterSpacing: "-0.03em", lineHeight: 1, color: PALETTE.text.primary, fontFamily: "'JetBrains Mono', monospace" }}>
-        {value}
-      </span>
-      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: PALETTE.text.tertiary, lineHeight: 1 }}>
-        {label}
-      </span>
-    </motion.div>
-  );
-}
-
 function Hero() {
   const reduce = useReducedMotion();
   const containerRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.65], [0, -80]);
-  const photoY = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const contentY = useTransform(scrollYProgress, [0, 0.7], [0, -60]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
-    <motion.section
+    <section
       id="main-content"
       ref={containerRef}
       style={{ position: "relative", minHeight: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: PALETTE.bg }}
     >
-      {/* Ambient mesh */}
-      <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}>
-        <div style={{ position: "absolute", top: "-18%", left: "-8%", width: "55vw", height: "55vw", borderRadius: "50%", background: `radial-gradient(circle, ${PALETTE.text.accent}18 0%, transparent 65%)`, filter: "blur(60px)" }} />
-        <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "radial-gradient(circle, #E8D5B720 0%, transparent 65%)", filter: "blur(80px)" }} />
-      </div>
-
-      {/* Vertical rule */}
-      <motion.div
+      {/* Single precise light source — not a blob soup */}
+      <div
         aria-hidden="true"
-        style={{ position: "absolute", top: 0, right: "34%", width: 1, height: "100%", background: `linear-gradient(to bottom, transparent, ${PALETTE.text.tertiary}22 30%, ${PALETTE.text.tertiary}10 70%, transparent)`, zIndex: 1, transformOrigin: "top center" }}
-        initial={reduce ? false : { scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ duration: 1.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          position: "absolute", top: "-10%", right: "20%",
+          width: "40vw", height: "40vw", borderRadius: "50%",
+          background: `radial-gradient(circle, ${PALETTE.text.accent}0C 0%, transparent 70%)`,
+          filter: "blur(40px)", pointerEvents: "none", zIndex: 0,
+        }}
       />
 
-      {/* Photo — right-edge bleed */}
+      {/* Photo — right-edge bleed, parallax */}
       <motion.div
-        style={{ position: "absolute", top: 0, right: 0, width: "clamp(260px, 40vw, 620px)", height: "100%", zIndex: 2 }}
-        initial={reduce ? false : { opacity: 0, x: 60 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.4, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        style={{
+          position: "absolute", top: 0, right: 0,
+          width: "clamp(240px, 38vw, 580px)", height: "100%", zIndex: 2,
+          y: reduce ? 0 : photoY,
+        }}
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Gradient mask — left edge */}
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to right, ${PALETTE.bg} 0%, ${PALETTE.bg}88 10%, transparent 32%)` }} />
-        {/* Gradient mask — bottom */}
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to top, ${PALETTE.bg} 0%, transparent 30%)` }} />
-        <motion.div style={{ width: "100%", height: "100%", y: reduce ? 0 : photoY }}>
-          <Image
-            src="/images/weed-hero.png"
-            alt="Weed Kerwing — Digital Designer and Developer based in Santo Domingo, Dominican Republic"
-            fill
-            className="object-cover object-top"
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 768px) 60vw, 40vw"
-          />
-        </motion.div>
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to right, ${PALETTE.bg} 0%, ${PALETTE.bg}CC 8%, transparent 28%)` }} />
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to top, ${PALETTE.bg} 0%, transparent 25%)` }} />
+        <Image
+          src="/images/weed-hero.png"
+          alt="Weed Kerwing — Digital Designer and Developer based in Santo Domingo, Dominican Republic"
+          fill
+          className="object-cover object-top"
+          priority
+          fetchPriority="high"
+          sizes="(max-width: 768px) 60vw, 40vw"
+        />
       </motion.div>
 
-      {/* Content */}
+      {/* Content — scroll-linked exit */}
       <motion.div
-        style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", justifyContent: "flex-end", flex: 1, paddingBottom: "5vh", ...(reduce ? {} : { opacity: contentOpacity, y: contentY }) }}
+        style={{
+          position: "relative", zIndex: 10,
+          display: "flex", flexDirection: "column", justifyContent: "flex-end",
+          flex: 1, paddingBottom: "clamp(2.5rem,5vh,4rem)",
+          ...(reduce ? {} : { y: contentY, opacity: contentOpacity }),
+        }}
       >
         <div className="mx-auto max-w-[1440px] w-full px-6 md:px-10 lg:px-16">
-          {/* Tag */}
-          <motion.p
-            className="text-[11px] md:text-[13px] tracking-[0.2em] uppercase mb-8 md:mb-12"
-            style={{ color: PALETTE.text.secondary }}
-            initial={reduce ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Digital Designer & Developer — Santo Domingo, DR
-          </motion.p>
 
-          {/* Name — Cormorant Garamond display */}
-          <h1 className="mb-8 md:mb-10 leading-[0.88] tracking-[-0.05em]" style={{ fontSize: "clamp(4rem, 13vw, 12rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300 }}>
-            <KineticName word="Weed" delay={0.7} />
-            <br />
-            <KineticName word="Kerwing" delay={1.0} italic />
-            <KineticName word="." delay={1.35} />
-          </h1>
-
-          {/* Subheadline */}
-          <motion.p
-            className="text-[clamp(1rem,1.8vw,1.2rem)] leading-[1.65] max-w-[38ch] mb-10"
-            style={{ color: PALETTE.text.secondary }}
-            initial={reduce ? false : { opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            Most websites explain what a business does.
-            <br />
-            Mine make people want to buy from it.
-          </motion.p>
-
-          {/* CTA */}
+          {/* Eyebrow */}
           <motion.div
+            className="flex items-center gap-4 mb-10 md:mb-14"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
+            <div className="h-px w-7" style={{ backgroundColor: PALETTE.text.accent }} />
+            <span className="text-[11px] tracking-[0.22em] uppercase" style={{ color: PALETTE.text.tertiary }}>
+              Digital Designer & Developer — Santo Domingo, DR
+            </span>
+          </motion.div>
+
+          {/* Name — static, massive, confident. No animation needed. */}
+          <motion.h1
+            className="leading-[0.86] tracking-[-0.04em] mb-10 md:mb-14"
+            style={{
+              fontSize: "clamp(4.5rem, 14vw, 13rem)",
+              fontFamily: "var(--font-display), system-ui, sans-serif",
+              fontWeight: 700,
+              color: PALETTE.text.primary,
+            }}
+            initial={reduce ? false : { opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Weed<br />
+            Kerwing<span style={{ color: PALETTE.text.accent }}>.</span>
+          </motion.h1>
+
+          {/* Bottom row — subhead + CTA side by side */}
+          <motion.div
+            className="flex flex-col sm:flex-row sm:items-end gap-8 sm:gap-16"
             initial={reduce ? false : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
+            <p
+              className="text-[clamp(0.95rem,1.6vw,1.15rem)] leading-[1.7] max-w-[34ch]"
+              style={{ color: PALETTE.text.secondary }}
+            >
+              Most websites explain what a business does.
+              Mine make people want to buy from it.
+            </p>
             <a
               href="#work"
-              className="group inline-flex items-center gap-3 text-[13px] tracking-[0.06em] uppercase transition-all duration-300"
-              style={{ color: PALETTE.text.accent }}
+              className="group inline-flex items-center gap-3 shrink-0 text-[12px] tracking-[0.1em] uppercase transition-all duration-300 pb-1"
+              style={{ color: PALETTE.text.accent, borderBottom: `1px solid ${PALETTE.text.accent}40` }}
             >
-              See what I've built
+              See the work
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Floating stats */}
-      <div aria-hidden="true">
-        <HeroStat value="2+" label="Years building" delay={2.0} style={{ bottom: "28%", left: "clamp(1.5rem, 4vw, 4rem)" }} />
-        <HeroStat value="12" label="Projects shipped" delay={2.1} style={{ bottom: "18%", left: "clamp(1.5rem, 4vw, 4rem)" }} />
-        <HeroStat value="SDQ" label="Santo Domingo, DR" delay={2.2} style={{ bottom: "8%", right: "clamp(1.5rem, 5vw, 5rem)" }} />
-      </div>
-
       {/* Bottom rule */}
-      <motion.div
-        aria-hidden="true"
-        style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, backgroundColor: PALETTE.border, zIndex: 15, transformOrigin: "left center" }}
-        initial={reduce ? false : { scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.4, delay: 2.0, ease: [0.22, 1, 0.36, 1] }}
-      />
-    </motion.section>
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, backgroundColor: PALETTE.border, zIndex: 15 }} />
+    </section>
   );
 }
 
@@ -619,7 +558,7 @@ function StatsStrip() {
             >
               <span
                 className="block leading-none tracking-[-0.04em]"
-                style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}
+                style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary }}
               >
                 {s.value}
               </span>
@@ -765,7 +704,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0]; index:
                   {project.category}
                 </span>
                 <motion.h3
-                  style={{ fontSize: "clamp(2.6rem,5.5vw,5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary, letterSpacing: "-0.03em", lineHeight: 1.0 }}
+                  style={{ fontSize: "clamp(2.6rem,5.5vw,5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary, letterSpacing: "-0.03em", lineHeight: 1.0 }}
                   animate={hovered && !reduce ? { x: 6 } : { x: 0 }}
                   transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
                 >
@@ -886,7 +825,7 @@ function SelectedWork() {
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-0">
             <LineReveal delay={0.06}>
-              <h2 className="font-medium tracking-[-0.05em] leading-[0.9]" style={{ fontSize: "clamp(3.5rem,9vw,8.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+              <h2 className="font-medium tracking-[-0.05em] leading-[0.9]" style={{ fontSize: "clamp(3.5rem,9vw,8.5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary }}>
                 Work
               </h2>
             </LineReveal>
@@ -950,7 +889,7 @@ function Capabilities() {
               </span>
             </LineReveal>
             <LineReveal delay={0.08}>
-              <h2 className="tracking-[-0.05em] leading-[0.92]" style={{ fontSize: "clamp(3rem,7vw,6rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+              <h2 className="tracking-[-0.05em] leading-[0.92]" style={{ fontSize: "clamp(3rem,7vw,6rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary }}>
                 From first sketch<br />
                 <span style={{ color: PALETTE.text.secondary }}>to live product.</span>
               </h2>
@@ -1065,7 +1004,7 @@ function About() {
               <span className="text-[11px] tracking-[0.2em] uppercase block mb-4" style={{ color: PALETTE.text.tertiary }}>The person behind it</span>
             </LineReveal>
             <LineReveal delay={0.1}>
-              <h2 className="tracking-[-0.04em] leading-[1.05] mb-10" style={{ fontSize: "clamp(2rem,4vw,3.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+              <h2 className="tracking-[-0.04em] leading-[1.05] mb-10" style={{ fontSize: "clamp(2rem,4vw,3.5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary }}>
                 I don&apos;t make websites.
                 <br />
                 <span style={{ color: PALETTE.text.secondary }}>I make businesses look real.</span>
@@ -1085,7 +1024,7 @@ function About() {
                 </FadeReveal>
               ))}
               <FadeReveal delay={0.6}>
-                <p className="text-[15px] italic mt-2" style={{ color: PALETTE.text.tertiary, fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: "italic" }}>
+                <p className="text-[15px] italic mt-2" style={{ color: PALETTE.text.tertiary, fontFamily: "var(--font-display), system-ui, sans-serif", fontStyle: "italic" }}>
                   The work either speaks for itself or it doesn&apos;t. Scroll up.
                 </p>
               </FadeReveal>
@@ -1131,7 +1070,7 @@ function Services() {
             </span>
           </LineReveal>
           <LineReveal delay={0.1}>
-            <h2 className="tracking-[-0.04em] leading-[1]" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+            <h2 className="tracking-[-0.04em] leading-[1]" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700, color: PALETTE.text.primary }}>
               Three tiers.
               <br />
               <span style={{ color: PALETTE.text.secondary }}>Zero templates.</span>
@@ -1249,32 +1188,6 @@ function Services() {
 
 /* ─── CONTACT ─── */
 
-function RotatingBadge() {
-  const reduce = useReducedMotion();
-  const text = "Available for work · Available for work · ";
-
-  return (
-    <motion.div
-      className="relative h-[140px] w-[140px] md:h-[160px] md:w-[160px] shrink-0"
-      animate={reduce ? {} : { rotate: 360 }}
-      transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-      aria-hidden="true"
-    >
-      <svg viewBox="0 0 160 160" className="w-full h-full">
-        <defs>
-          <path id="badge-circle" d="M 80,80 m -55,0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" />
-        </defs>
-        <text style={{ fill: PALETTE.text.secondary, fontSize: "10.5px", letterSpacing: "0.22em" }}>
-          <textPath href="#badge-circle">{text}</textPath>
-        </text>
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: PALETTE.text.accent }} />
-      </div>
-    </motion.div>
-  );
-}
-
 function Contact() {
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
@@ -1296,7 +1209,7 @@ function Contact() {
         </FadeReveal>
 
         <motion.div style={reduce ? {} : { y: headlineY }} className="mb-16 md:mb-24">
-          <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300 }}>
+          <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "var(--font-display), system-ui, sans-serif", fontWeight: 700 }}>
             <LineReveal>
               <span className="block" style={{ color: PALETTE.text.primary }}>Something&apos;s been</span>
             </LineReveal>
@@ -1311,8 +1224,8 @@ function Contact() {
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-6 items-end">
-          <FadeReveal delay={0.3} className="lg:col-span-4">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <FadeReveal delay={0.3}>
             <p className="text-[16px] md:text-[17px] leading-[1.75] mb-10" style={{ color: PALETTE.text.secondary }}>
               Tell me about the project — what it is, what you need, and when you want it live. I&apos;ll respond within 24 hours.
             </p>
@@ -1322,7 +1235,7 @@ function Contact() {
             </p>
           </FadeReveal>
 
-          <FadeReveal delay={0.42} className="lg:col-span-5 lg:col-start-5">
+          <FadeReveal delay={0.42}>
             <div className="flex flex-col gap-6">
               {/* WhatsApp */}
               <a
@@ -1381,9 +1294,6 @@ function Contact() {
             </div>
           </FadeReveal>
 
-          <FadeReveal delay={0.55} className="lg:col-span-3 lg:col-start-10 flex lg:justify-end">
-            <RotatingBadge />
-          </FadeReveal>
         </div>
 
         <FadeReveal delay={0.65}>
@@ -1402,7 +1312,7 @@ function Footer() {
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
         <div className="grid md:grid-cols-3 gap-8 items-center">
           <div>
-            <span className="text-[15px] font-medium tracking-[-0.02em]" style={{ color: PALETTE.text.primary, fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+            <span className="text-[15px] font-medium tracking-[-0.02em]" style={{ color: PALETTE.text.primary, fontFamily: "var(--font-display), system-ui, sans-serif" }}>
               Weed Kerwing<span style={{ color: PALETTE.text.accent }}>.</span>
             </span>
           </div>
@@ -1497,7 +1407,6 @@ export default function WeedKerwingPortfolio() {
         <a href="#main-content" className="skip-link">Skip to main content</a>
 
         <GrainOverlay />
-        <Vignette />
         <CursorFollower />
         <WhatsAppFloat />
         <Navbar />
