@@ -10,13 +10,11 @@ import {
   useSpring,
   useInView,
   AnimatePresence,
-
 } from "motion/react";
 import {
   ArrowRight,
   ArrowUpRight,
   Instagram,
-  Send,
   Menu,
   X,
   Minus,
@@ -25,29 +23,22 @@ import Image from "next/image";
 
 /* ═══════════════════════════════════════════════════════════════════
    DESIGN SYSTEM — Weed Kerwing Portfolio
-
    Philosophy: Editorial precision meets digital craft.
-   Not a template. Not a theme. A deliberate artifact.
-
-   Palette: Near-black layers + warm cream primary text +
-            single electric accent used surgically
-   Typography: Dramatic scale contrast — 12vw display vs 14px body
-   Motion: Scroll-linked, physics-based, never decorative
-   Grid: Asymmetric, full-bleed moments, generous whitespace
-   Texture: Film grain overlay, organic gradients
+   Fonts: Cormorant Garamond (display) + Inter (UI) + JetBrains Mono (numbers)
    ═══════════════════════════════════════════════════════════════════ */
 
 const PALETTE = {
   bg: "#060606",
   surface: "#0C0C0C",
-  surfaceRaised: "#141414",
+  surfaceRaised: "#131210",
   border: "rgba(255,255,255,0.06)",
   borderHover: "rgba(255,255,255,0.12)",
+  borderWarm: "rgba(245,240,232,0.08)",
   text: {
-    primary: "#F5F0E8",     // warm cream — not pure white
-    secondary: "#8A8578",   // warm gray
-    tertiary: "#4A4640",    // subtle
-    accent: "#C8FF00",      // electric lime — surgical use only
+    primary: "#F5F0E8",
+    secondary: "#8A8578",
+    tertiary: "#6B6660",   // bumped from #4A4640 — passes 3:1 for large text
+    accent: "#C8FF00",
   },
 } as const;
 
@@ -80,10 +71,11 @@ const projects = [
 
 const services = [
   {
-    name: "Launch",
+    name: "Entrada",
     price: "29,000",
-    subtitle: "One page. Full impact.",
-    description: "For professionals and small businesses needing a strong first impression. Not a template — a designed, responsive, conversion-ready landing page.",
+    subtitle: "One page. No excuses.",
+    description:
+      "For businesses that need to look credible before they feel ready — a single, conversion-focused page that punches well above its weight.",
     includes: [
       "Custom landing page design",
       "Responsive across all devices",
@@ -93,11 +85,12 @@ const services = [
     ],
   },
   {
-    name: "Business",
+    name: "Presencia",
     price: "59,000",
     featured: true,
-    subtitle: "Your complete digital presence.",
-    description: "For established businesses that need more than a page. A full website with custom visual direction, structured content, and lead capture — built to grow with you.",
+    subtitle: "Built for the long run.",
+    description:
+      "For established businesses that have outgrown a single page and need a full digital presence that works as hard as they do.",
     includes: [
       "Up to 6 custom-designed pages",
       "Unique visual direction",
@@ -107,10 +100,11 @@ const services = [
     ],
   },
   {
-    name: "Premium",
+    name: "Obra",
     price: "95,000",
-    subtitle: "Refuse to look generic.",
-    description: "For brands that understand the difference between a website and a digital experience. Custom interactions, advanced motion design, CMS integration, and post-launch support.",
+    subtitle: "For when the bar is higher than everyone else's.",
+    description:
+      "For brands that understand the difference between a website and an experience — custom motion, CMS, strategy, and a month of support after launch.",
     includes: [
       "Custom UI/UX from scratch",
       "Advanced interactions & motion",
@@ -134,12 +128,17 @@ const capabilities = [
   "Performance Optimization",
 ];
 
+const CAP_SIZES: Array<"sm" | "md" | "lg"> = [
+  "lg", "md", "sm", "md", "lg", "sm", "md", "lg", "sm", "md",
+];
+
 /* ─── GRAIN OVERLAY ─── */
 
 function GrainOverlay() {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.035]"
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.05]"
       style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
         backgroundRepeat: "repeat",
@@ -149,7 +148,22 @@ function GrainOverlay() {
   );
 }
 
-/* ─── SMOOTH LINE REVEAL ─── */
+/* ─── VIGNETTE ─── */
+
+function Vignette() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-[9998]"
+      style={{
+        background:
+          "radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(6,6,6,0.55) 100%)",
+      }}
+    />
+  );
+}
+
+/* ─── LINE REVEAL ─── */
 
 function LineReveal({
   children,
@@ -169,11 +183,7 @@ function LineReveal({
       <motion.div
         initial={reduce ? false : { y: "110%" }}
         animate={inView ? { y: "0%" } : {}}
-        transition={{
-          duration: 1.1,
-          delay,
-          ease: [0.22, 1, 0.36, 1],
-        }}
+        transition={{ duration: 1.1, delay, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}
       </motion.div>
@@ -202,54 +212,21 @@ function FadeReveal({
       className={className}
       initial={reduce ? false : { opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.9,
-        delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ─── MAGNETIC ELEMENT ─── */
-
-function useMagnetic(strength = 0.3) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 150, damping: 15 });
-  const springY = useSpring(y, { stiffness: 150, damping: 15 });
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleMouse = useCallback(
-    (e: React.MouseEvent) => {
-      if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      x.set((e.clientX - cx) * strength);
-      y.set((e.clientY - cy) * strength);
-    },
-    [x, y, strength]
-  );
-
-  const reset = useCallback(() => {
-    x.set(0);
-    y.set(0);
-  }, [x, y]);
-
-  return { ref, springX, springY, handleMouse, reset };
-}
-
-/* ─── CURSOR FOLLOWER ─── */
+/* ─── CURSOR FOLLOWER (ring, not dot) ─── */
 
 function CursorFollower() {
   const reduce = useReducedMotion();
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const springX = useSpring(x, { stiffness: 300, damping: 28 });
-  const springY = useSpring(y, { stiffness: 300, damping: 28 });
+  const springX = useSpring(x, { stiffness: 250, damping: 26 });
+  const springY = useSpring(y, { stiffness: 250, damping: 26 });
 
   useEffect(() => {
     if (reduce) return;
@@ -265,17 +242,55 @@ function CursorFollower() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 z-[9998] pointer-events-none mix-blend-difference hidden lg:block"
+      aria-hidden="true"
+      className="fixed top-0 left-0 z-[9997] pointer-events-none hidden lg:block"
       style={{
         x: springX,
         y: springY,
-        width: 12,
-        height: 12,
+        width: 36,
+        height: 36,
         borderRadius: "50%",
-        backgroundColor: PALETTE.text.primary,
+        border: `1px solid rgba(245,240,232,0.5)`,
         transform: "translate(-50%, -50%)",
       }}
     />
+  );
+}
+
+/* ─── WHATSAPP FLOAT ─── */
+
+function WhatsAppFloat() {
+  const [visible, setVisible] = useState(false);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 3000);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.a
+          href="https://wa.me/18092934827?text=Hola%20Weed%2C%20me%20interesa%20hablar%20sobre%20un%20proyecto"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+          className="fixed bottom-6 right-6 z-[9990] flex items-center justify-center rounded-full h-14 w-14 shadow-2xl"
+          style={{ backgroundColor: PALETTE.text.accent }}
+          initial={reduce ? false : { scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          whileHover={reduce ? {} : { scale: 1.12 }}
+        >
+          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="#060606" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.554 4.107 1.523 5.832L.057 23.885a.75.75 0 0 0 .921.914l6.233-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.715 9.715 0 0 1-4.96-1.358l-.355-.211-3.696.97.985-3.596-.231-.371A9.713 9.713 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z" />
+          </svg>
+        </motion.a>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -310,36 +325,23 @@ function Navbar() {
         initial={reduce ? false : { y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.9, delay: 2.2, ease: [0.22, 1, 0.36, 1] }}
+        aria-label="Main navigation"
       >
         <div
-          className={`transition-all duration-700 ${
-            scrolled
-              ? "bg-[#060606]/90 backdrop-blur-2xl border-b"
-              : "bg-transparent border-b border-transparent"
-          }`}
+          className={`transition-all duration-700 ${scrolled ? "bg-[#060606]/90 backdrop-blur-2xl border-b" : "bg-transparent border-b border-transparent"}`}
           style={scrolled ? { borderColor: PALETTE.border } : {}}
         >
           <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
             <div className="flex h-[76px] items-center justify-between">
-              {/* Logo */}
-              <a
-                href="#"
-                className="text-[15px] font-medium tracking-[-0.02em]"
-                style={{ color: PALETTE.text.primary }}
-              >
-                Weed Kerwing
-                <span className="inline-block ml-0.5" style={{ color: PALETTE.text.accent }}>
-                  .
-                </span>
+              <a href="#" className="text-[15px] font-medium tracking-[-0.02em]" style={{ color: PALETTE.text.primary }}>
+                Weed Kerwing<span style={{ color: PALETTE.text.accent }}>.</span>
               </a>
-
-              {/* Desktop links */}
               <div className="hidden md:flex items-center gap-12">
                 {links.map((l) => (
                   <a
                     key={l.href}
                     href={l.href}
-                    className="text-[13px] tracking-[0.08em] uppercase transition-colors duration-300 hover:opacity-100"
+                    className="text-[13px] tracking-[0.08em] uppercase transition-colors duration-300"
                     style={{ color: PALETTE.text.tertiary }}
                     onMouseEnter={(e) => (e.currentTarget.style.color = PALETTE.text.primary)}
                     onMouseLeave={(e) => (e.currentTarget.style.color = PALETTE.text.tertiary)}
@@ -348,22 +350,19 @@ function Navbar() {
                   </a>
                 ))}
               </div>
-
-              {/* CTA */}
               <a
                 href="#contact"
                 className="hidden md:inline-flex items-center gap-2 text-[13px] tracking-[0.04em] uppercase transition-colors duration-300"
                 style={{ color: PALETTE.text.accent }}
               >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PALETTE.text.accent }} />
+                <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: PALETTE.text.accent }} />
                 Available for work
               </a>
-
-              {/* Mobile toggle */}
               <button
                 className="md:hidden p-2"
                 onClick={() => setMobileOpen(!mobileOpen)}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileOpen}
                 style={{ color: PALETTE.text.primary }}
               >
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -373,7 +372,6 @@ function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Mobile overlay */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -383,14 +381,17 @@ function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
           >
             {links.map((l, i) => (
               <motion.a
                 key={l.href}
                 href={l.href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-4 text-[clamp(2rem,8vw,3.5rem)] font-medium tracking-[-0.03em]"
-                style={{ color: PALETTE.text.primary }}
+                className="block py-4 font-medium tracking-[-0.03em]"
+                style={{ fontSize: "clamp(2rem,8vw,3.5rem)", color: PALETTE.text.primary }}
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -407,6 +408,16 @@ function Navbar() {
               <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: PALETTE.text.accent }} />
               <span className="text-sm" style={{ color: PALETTE.text.accent }}>Available for work</span>
             </motion.div>
+            <motion.div
+              className="absolute bottom-8 left-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <p className="text-[11px] tracking-[0.15em] uppercase" style={{ color: PALETTE.text.tertiary }}>
+                Santo Domingo, DR
+              </p>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -416,332 +427,440 @@ function Navbar() {
 
 /* ─── HERO ─── */
 
+function KineticName({ word, delay = 0, italic = false }: { word: string; delay?: number; italic?: boolean }) {
+  const reduce = useReducedMotion();
+  const chars = word.split("");
+  return (
+    <span style={{ display: "inline-block", fontStyle: italic ? "italic" : "normal" }}>
+      {chars.map((char, i) => (
+        <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "bottom" }}>
+          <motion.span
+            style={{ display: "inline-block", color: char === "." ? PALETTE.text.accent : PALETTE.text.primary }}
+            initial={reduce ? false : { y: "115%", rotateX: 25 }}
+            animate={{ y: "0%", rotateX: 0 }}
+            transition={{ duration: 1.1, delay: delay + i * 0.045, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {char}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function HeroStat({ value, label, style, delay = 0 }: {
+  value: string; label: string; style: React.CSSProperties; delay?: number;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.div
+      style={{ position: "absolute", ...style, display: "flex", flexDirection: "column", gap: 4, zIndex: 10 }}
+      initial={reduce ? false : { opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <span style={{ fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)", fontWeight: 500, letterSpacing: "-0.03em", lineHeight: 1, color: PALETTE.text.primary, fontFamily: "'JetBrains Mono', monospace" }}>
+        {value}
+      </span>
+      <span style={{ fontSize: 9, letterSpacing: "0.2em", textTransform: "uppercase", color: PALETTE.text.tertiary, lineHeight: 1 }}>
+        {label}
+      </span>
+    </motion.div>
+  );
+}
+
 function Hero() {
   const reduce = useReducedMotion();
   const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.8], [0, 150]);
-  const photoScale = useTransform(scrollYProgress, [0, 0.6], [1, 1.15]);
-  const photoRotate = useTransform(scrollYProgress, [0, 0.6], [0, -3]);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 0.65], [0, -80]);
+  const photoY = useTransform(scrollYProgress, [0, 1], [0, 180]);
 
   return (
     <motion.section
+      id="main-content"
       ref={containerRef}
-      className="relative min-h-[100dvh] flex flex-col justify-end overflow-hidden pb-12 md:pb-16"
-      style={reduce ? {} : { opacity: heroOpacity }}
+      style={{ position: "relative", minHeight: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden", backgroundColor: PALETTE.bg }}
     >
-      {/* Background gradient mesh */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-[-20%] right-[-10%] w-[70vw] h-[70vh] rounded-full opacity-[0.04]"
-          style={{
-            background: `radial-gradient(circle, ${PALETTE.text.accent}, transparent 70%)`,
-          }}
-        />
-        <div
-          className="absolute bottom-[-30%] left-[-15%] w-[60vw] h-[60vh] rounded-full opacity-[0.03]"
-          style={{
-            background: `radial-gradient(circle, #E8D5B7, transparent 70%)`,
-          }}
-        />
+      {/* Ambient mesh */}
+      <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0 }}>
+        <div style={{ position: "absolute", top: "-18%", left: "-8%", width: "55vw", height: "55vw", borderRadius: "50%", background: `radial-gradient(circle, ${PALETTE.text.accent}18 0%, transparent 65%)`, filter: "blur(60px)" }} />
+        <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: "50vw", height: "50vw", borderRadius: "50%", background: "radial-gradient(circle, #E8D5B720 0%, transparent 65%)", filter: "blur(80px)" }} />
       </div>
+
+      {/* Vertical rule */}
+      <motion.div
+        aria-hidden="true"
+        style={{ position: "absolute", top: 0, right: "34%", width: 1, height: "100%", background: `linear-gradient(to bottom, transparent, ${PALETTE.text.tertiary}22 30%, ${PALETTE.text.tertiary}10 70%, transparent)`, zIndex: 1, transformOrigin: "top center" }}
+        initial={reduce ? false : { scaleY: 0 }}
+        animate={{ scaleY: 1 }}
+        transition={{ duration: 1.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      />
+
+      {/* Photo — right-edge bleed */}
+      <motion.div
+        style={{ position: "absolute", top: 0, right: 0, width: "clamp(260px, 40vw, 620px)", height: "100%", zIndex: 2 }}
+        initial={reduce ? false : { opacity: 0, x: 60 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.4, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Gradient mask — left edge */}
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to right, ${PALETTE.bg} 0%, ${PALETTE.bg}88 10%, transparent 32%)` }} />
+        {/* Gradient mask — bottom */}
+        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 3, background: `linear-gradient(to top, ${PALETTE.bg} 0%, transparent 30%)` }} />
+        <motion.div style={{ width: "100%", height: "100%", y: reduce ? 0 : photoY }}>
+          <Image
+            src="/images/weed-hero.png"
+            alt="Weed Kerwing — Digital Designer and Developer based in Santo Domingo, Dominican Republic"
+            fill
+            className="object-cover object-top"
+            priority
+            fetchPriority="high"
+            sizes="(max-width: 768px) 60vw, 40vw"
+          />
+        </motion.div>
+      </motion.div>
 
       {/* Content */}
       <motion.div
-        className="relative mx-auto max-w-[1440px] w-full px-6 md:px-10 lg:px-16"
-        style={reduce ? {} : { y: heroY }}
+        style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", justifyContent: "flex-end", flex: 1, paddingBottom: "5vh", ...(reduce ? {} : { opacity: contentOpacity, y: contentY }) }}
       >
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-6 items-end">
-          {/* Left: Typography */}
-          <div className="lg:col-span-8 xl:col-span-7">
-            {/* Tag */}
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-8 md:mb-12"
-            >
-              <span
-                className="text-[11px] md:text-[13px] tracking-[0.2em] uppercase"
-                style={{ color: PALETTE.text.secondary }}
-              >
-                Digital Designer & Developer — Santo Domingo, DR
-              </span>
-            </motion.div>
+        <div className="mx-auto max-w-[1440px] w-full px-6 md:px-10 lg:px-16">
+          {/* Tag */}
+          <motion.p
+            className="text-[11px] md:text-[13px] tracking-[0.2em] uppercase mb-8 md:mb-12"
+            style={{ color: PALETTE.text.secondary }}
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Digital Designer & Developer — Santo Domingo, DR
+          </motion.p>
 
-            {/* Name — massive display */}
-            <div className="mb-8 md:mb-10">
-              <div className="overflow-hidden">
-                <motion.h1
-                  className="text-[clamp(3.5rem,12vw,10rem)] font-medium tracking-[-0.05em] leading-[0.85]"
-                  style={{ color: PALETTE.text.primary }}
-                  initial={reduce ? false : { y: "120%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  Weed
-                </motion.h1>
-              </div>
-              <div className="overflow-hidden">
-                <motion.h1
-                  className="text-[clamp(3.5rem,12vw,10rem)] font-medium tracking-[-0.05em] leading-[0.85]"
-                  style={{ color: PALETTE.text.primary }}
-                  initial={reduce ? false : { y: "120%" }}
-                  animate={{ y: "0%" }}
-                  transition={{ duration: 1.2, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  Kerwing
-                  <span style={{ color: PALETTE.text.accent }}>.</span>
-                </motion.h1>
-              </div>
-            </div>
+          {/* Name — Cormorant Garamond display */}
+          <h1 className="mb-8 md:mb-10 leading-[0.88] tracking-[-0.05em]" style={{ fontSize: "clamp(4rem, 13vw, 12rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300 }}>
+            <KineticName word="Weed" delay={0.7} />
+            <br />
+            <KineticName word="Kerwing" delay={1.0} italic />
+            <KineticName word="." delay={1.35} />
+          </h1>
 
-            {/* Descriptor */}
-            <motion.p
-              className="text-[clamp(1rem,2vw,1.25rem)] leading-[1.6] max-w-[38ch]"
-              style={{ color: PALETTE.text.secondary }}
-              initial={reduce ? false : { opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
-            >
-              I build digital experiences that make businesses look
-              established, modern, and ready to grow.
-            </motion.p>
-          </div>
+          {/* Subheadline */}
+          <motion.p
+            className="text-[clamp(1rem,1.8vw,1.2rem)] leading-[1.65] max-w-[38ch] mb-10"
+            style={{ color: PALETTE.text.secondary }}
+            initial={reduce ? false : { opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Most websites explain what a business does.
+            <br />
+            Mine make people want to buy from it.
+          </motion.p>
 
-          {/* Right: Photo + meta */}
-          <div className="lg:col-span-4 xl:col-span-5 flex flex-col items-start lg:items-end gap-8">
-            {/* Photo — editorial crop, not a circle */}
-            <motion.div
-              className="relative w-[280px] md:w-[320px] lg:w-[360px] xl:w-[400px]"
-              initial={reduce ? false : { opacity: 0, scale: 0.9, filter: "blur(20px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 1.4, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-              style={reduce ? {} : { scale: photoScale, rotate: photoRotate }}
+          {/* CTA */}
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <a
+              href="#work"
+              className="group inline-flex items-center gap-3 text-[13px] tracking-[0.06em] uppercase transition-all duration-300"
+              style={{ color: PALETTE.text.accent }}
             >
-              {/* Subtle glow */}
-              <div
-                className="absolute -inset-8 rounded-[32px] opacity-30 blur-3xl"
-                style={{ background: `linear-gradient(135deg, ${PALETTE.text.accent}15, transparent 60%)` }}
-              />
-              <div className="relative rounded-[20px] overflow-hidden aspect-[3/4]">
-                <Image
-                  src="/images/weed-hero.png"
-                  alt="Weed Kerwing"
-                  fill
-                  className="object-cover"
-                  priority
-                  fetchPriority="high"
-                />
-                {/* Film overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#060606]/60 via-transparent to-transparent" />
-              </div>
-            </motion.div>
-
-            {/* Scroll indicator */}
-            <motion.div
-              className="flex items-center gap-3"
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 2.2 }}
-            >
-              <motion.div
-                className="w-px h-8"
-                style={{ backgroundColor: PALETTE.text.tertiary }}
-                animate={reduce ? {} : { scaleY: [1, 0.4, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <span
-                className="text-[11px] tracking-[0.15em] uppercase"
-                style={{ color: PALETTE.text.tertiary }}
-              >
-                Scroll
-              </span>
-            </motion.div>
-          </div>
+              See what I've built
+              <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </a>
+          </motion.div>
         </div>
       </motion.div>
+
+      {/* Floating stats */}
+      <div aria-hidden="true">
+        <HeroStat value="2+" label="Years building" delay={2.0} style={{ bottom: "28%", left: "clamp(1.5rem, 4vw, 4rem)" }} />
+        <HeroStat value="12" label="Projects shipped" delay={2.1} style={{ bottom: "18%", left: "clamp(1.5rem, 4vw, 4rem)" }} />
+        <HeroStat value="SDQ" label="Santo Domingo, DR" delay={2.2} style={{ bottom: "8%", right: "clamp(1.5rem, 5vw, 5rem)" }} />
+      </div>
+
+      {/* Bottom rule */}
+      <motion.div
+        aria-hidden="true"
+        style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 1, backgroundColor: PALETTE.border, zIndex: 15, transformOrigin: "left center" }}
+        initial={reduce ? false : { scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1.4, delay: 2.0, ease: [0.22, 1, 0.36, 1] }}
+      />
     </motion.section>
+  );
+}
+
+/* ─── STATS STRIP ─── */
+
+function StatsStrip() {
+  const stats = [
+    { value: "12+", label: "Projects shipped" },
+    { value: "2+", label: "Years of craft" },
+    { value: "100%", label: "Custom built" },
+    { value: "DR", label: "Based, global scope" },
+  ];
+
+  return (
+    <section aria-label="Key statistics" className="border-b" style={{ borderColor: PALETTE.border, backgroundColor: PALETTE.surface }}>
+      <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          {stats.map((s, i) => (
+            <FadeReveal
+              key={s.label}
+              delay={i * 0.1}
+              className={`py-8 md:py-10 flex flex-col gap-2 ${i < stats.length - 1 ? "border-r" : ""}`}
+              style={{ borderColor: PALETTE.border }}
+            >
+              <span
+                className="block leading-none tracking-[-0.04em]"
+                style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}
+              >
+                {s.value}
+              </span>
+              <span className="text-[11px] tracking-[0.15em] uppercase" style={{ color: PALETTE.text.tertiary }}>
+                {s.label}
+              </span>
+            </FadeReveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── MARQUEE ─── */
+
+function Marquee() {
+  const reduce = useReducedMotion();
+  const items = [
+    "Strategy", "UI/UX Design", "Responsive Dev", "Landing Pages",
+    "E-Commerce", "Brand Direction", "Motion Design", "AI-Powered",
+    "Performance", "Interactive Experiences",
+  ];
+  const repeated = [...items, ...items, ...items];
+
+  return (
+    <div
+      className="overflow-hidden border-t border-b py-4"
+      style={{ borderColor: PALETTE.border, backgroundColor: PALETTE.surface }}
+      aria-hidden="true"
+    >
+      <div
+        className="flex gap-8 whitespace-nowrap"
+        style={{ animation: reduce ? "none" : "marquee-left 35s linear infinite", width: "max-content" }}
+      >
+        {repeated.map((item, i) => (
+          <span key={i} className="text-[11px] tracking-[0.2em] uppercase flex items-center gap-8" style={{ color: PALETTE.text.tertiary }}>
+            {item}
+            <span style={{ color: PALETTE.text.accent, fontSize: 6 }}>◆</span>
+          </span>
+        ))}
+      </div>
+      <style jsx>{`
+        @keyframes marquee-left {
+          from { transform: translateX(0); }
+          to { transform: translateX(-33.333%); }
+        }
+      `}</style>
+    </div>
   );
 }
 
 /* ─── SELECTED WORK ─── */
 
-function ProjectCard({
-  project,
-  index,
-}: {
-  project: (typeof projects)[0];
-  index: number;
-}) {
+function ProjectCard({ project, index }: { project: (typeof projects)[0]; index: number }) {
   const reduce = useReducedMotion();
   const cardRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(cardRef, { once: true, amount: 0.15 });
+  const inView = useInView(cardRef, { once: true, amount: 0.12 });
   const [hovered, setHovered] = useState(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  const numX = useSpring(useTransform(mouseX, [0, 1], [-18, 18]), { stiffness: 80, damping: 18 });
+  const numY = useSpring(useTransform(mouseY, [0, 1], [-10, 10]), { stiffness: 80, damping: 18 });
 
-  const handleMove = (e: React.MouseEvent) => {
+  const handleMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
+    mouseX.set((e.clientX - rect.left) / rect.width);
+    mouseY.set((e.clientY - rect.top) / rect.height);
   };
 
   return (
     <motion.div
       ref={cardRef}
-      initial={reduce ? false : { opacity: 0, y: 80 }}
+      initial={reduce ? false : { opacity: 0, y: 100 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 1,
-        delay: index * 0.2,
-        ease: [0.22, 1, 0.36, 1],
-      }}
+      transition={{ duration: 1.1, delay: index * 0.18, ease: [0.16, 1, 0.3, 1] }}
     >
       <a
         href={project.url}
         target="_blank"
         rel="noopener noreferrer"
         className="group block"
+        aria-label={`View ${project.title} — opens in new tab`}
         onMouseMove={handleMove}
         onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseLeave={() => { setHovered(false); mouseX.set(0.5); mouseY.set(0.5); }}
       >
-        <div
-          className="relative rounded-[24px] overflow-hidden transition-all duration-700"
+        <motion.div
+          className="relative overflow-hidden"
           style={{
             backgroundColor: PALETTE.surface,
-            border: `1px solid ${hovered ? PALETTE.borderHover : PALETTE.border}`,
+            border: `1px solid`,
+            borderColor: hovered ? `${project.color}30` : PALETTE.border,
+            borderRadius: 28,
+            transition: "border-color 0.6s cubic-bezier(0.22,1,0.36,1)",
           }}
+          animate={hovered && !reduce ? { scale: 1.008 } : { scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Spotlight effect */}
+          {/* Ambient glow */}
           <motion.div
-            className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-10"
-            style={{
-              opacity: hovered ? 0.6 : 0,
-              background: `radial-gradient(800px circle at ${mouseX.get()}px ${mouseY.get()}px, ${project.color}08, transparent 40%)`,
-            }}
+            aria-hidden="true"
+            className="absolute inset-0 pointer-events-none z-0"
+            animate={{ opacity: hovered ? 1 : 0 }}
+            transition={{ duration: 0.8 }}
+            style={{ background: `radial-gradient(ellipse 70% 60% at 20% 50%, ${project.color}0D, transparent 70%)` }}
           />
 
-          <div className="grid lg:grid-cols-12 gap-0">
-            {/* Left: Project visual area */}
-            <div className="lg:col-span-7 relative">
-              <div
-                className="relative h-[320px] md:h-[420px] lg:h-[520px] overflow-hidden"
-                style={{
-                  background: `linear-gradient(135deg, ${project.color}10 0%, ${PALETTE.bg} 60%)`,
-                }}
+          <div className="relative z-10 flex flex-col lg:flex-row min-h-[480px] md:min-h-[560px] lg:min-h-[520px]">
+            {/* Left panel */}
+            <div
+              className="relative flex-1 lg:flex-[0_0_58%] overflow-hidden flex flex-col justify-between p-8 md:p-10 lg:p-14"
+              style={{ borderRight: `1px solid ${hovered ? `${project.color}20` : PALETTE.border}`, transition: "border-color 0.6s" }}
+            >
+              {/* Ghost number — parallax */}
+              <motion.div
+                aria-hidden="true"
+                className="absolute select-none pointer-events-none font-semibold tracking-[-0.07em]"
+                style={{ fontSize: "clamp(140px,22vw,280px)", color: project.color, opacity: 0.055, bottom: "-0.1em", left: "-0.04em", x: reduce ? 0 : numX, y: reduce ? 0 : numY, lineHeight: 1, fontFamily: "'JetBrains Mono', monospace" }}
               >
-                {/* Large project number */}
+                {project.index}
+              </motion.div>
+
+              {/* Top row */}
+              <div className="flex items-center justify-between relative z-10">
                 <div
-                  className="absolute top-8 left-8 md:top-12 md:left-12 text-[120px] md:text-[200px] font-medium leading-none tracking-[-0.06em] select-none"
-                  style={{ color: `${project.color}08` }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] tracking-[0.14em] uppercase font-medium"
+                  style={{ backgroundColor: `${project.color}12`, color: project.color, border: `1px solid ${project.color}25` }}
                 >
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: project.color }} />
                   {project.index}
                 </div>
+                <span className="text-[11px] tracking-[0.16em] uppercase tabular-nums" style={{ color: PALETTE.text.tertiary, fontFamily: "'JetBrains Mono', monospace" }}>
+                  {project.year}
+                </span>
+              </div>
 
-                {/* Centered project title — huge */}
-                <div className="absolute inset-0 flex items-center justify-center p-8">
-                  <motion.h3
-                    className="text-[clamp(2.5rem,5vw,4.5rem)] font-medium tracking-[-0.04em] text-center leading-[1.05]"
-                    style={{ color: PALETTE.text.primary }}
-                    animate={hovered && !reduce ? { scale: 1.03 } : { scale: 1 }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {project.title}
-                  </motion.h3>
-                </div>
+              {/* Title */}
+              <div className="relative z-10 mt-auto pb-4">
+                <span className="block text-[11px] tracking-[0.18em] uppercase mb-2" style={{ color: PALETTE.text.tertiary }}>
+                  {project.category}
+                </span>
+                <motion.h3
+                  style={{ fontSize: "clamp(2.6rem,5.5vw,5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary, letterSpacing: "-0.03em", lineHeight: 1.0 }}
+                  animate={hovered && !reduce ? { x: 6 } : { x: 0 }}
+                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {project.title}
+                </motion.h3>
+              </div>
 
-                {/* Category badge */}
-                <div className="absolute top-6 right-6 md:top-10 md:right-10">
-                  <span
-                    className="text-[11px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-full"
-                    style={{
-                      backgroundColor: `${project.color}12`,
-                      color: project.color,
-                      border: `1px solid ${project.color}20`,
-                    }}
-                  >
-                    {project.category}
-                  </span>
-                </div>
-
-                {/* Arrow — bottom right */}
-                <div className="absolute bottom-6 right-6 md:bottom-10 md:right-10">
-                  <motion.div
-                    className="h-14 w-14 rounded-full flex items-center justify-center"
-                    style={{
-                      backgroundColor: `${PALETTE.text.primary}08`,
-                      border: `1px solid ${PALETTE.border}`,
-                    }}
-                    animate={hovered && !reduce ? { scale: 1.15 } : { scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  >
-                    <ArrowUpRight
-                      className="h-5 w-5 transition-transform duration-500 group-hover:rotate-45"
-                      style={{ color: PALETTE.text.primary }}
-                    />
-                  </motion.div>
-                </div>
+              {/* Bottom CTA row */}
+              <div className="relative z-10 flex items-center justify-between">
+                <motion.div
+                  className="flex items-center gap-3"
+                  animate={hovered && !reduce ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <span className="text-[12px] tracking-[0.1em] uppercase font-medium" style={{ color: project.color }}>View live site</span>
+                  <div className="h-px w-8" style={{ backgroundColor: project.color, opacity: 0.5 }} />
+                </motion.div>
+                <motion.div
+                  className="h-14 w-14 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: hovered ? project.color : `${PALETTE.text.primary}08`, border: `1px solid ${hovered ? project.color : PALETTE.border}`, transition: "background-color 0.5s, border-color 0.5s" }}
+                  animate={hovered && !reduce ? { scale: 1.12 } : { scale: 1 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                >
+                  <ArrowUpRight className="h-5 w-5" style={{ color: hovered ? "#060606" : PALETTE.text.primary, transition: "color 0.4s" }} />
+                </motion.div>
               </div>
             </div>
 
-            {/* Right: Project details */}
-            <div className="lg:col-span-5 p-8 md:p-10 lg:p-12 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-8">
-                  <span
-                    className="text-[11px] tracking-[0.15em] uppercase"
-                    style={{ color: PALETTE.text.tertiary }}
-                  >
-                    Project {project.index}
-                  </span>
-                  <span
-                    className="text-[11px] tracking-[0.15em] uppercase"
-                    style={{ color: PALETTE.text.tertiary }}
-                  >
-                    {project.year}
-                  </span>
-                </div>
+            {/* Right panel — hover reveal */}
+            <div className="relative lg:flex-[0_0_42%] overflow-hidden">
+              <motion.div
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none"
+                animate={{ opacity: hovered ? 1 : 0 }}
+                transition={{ duration: 0.7 }}
+                style={{ background: `linear-gradient(160deg, ${project.color}08 0%, transparent 55%)` }}
+              />
 
-                <p
-                  className="text-[15px] leading-[1.7] mb-8"
-                  style={{ color: PALETTE.text.secondary }}
-                >
+              {/* Drawer content */}
+              <motion.div
+                className="absolute inset-0 flex flex-col justify-end p-8 md:p-10 lg:p-14"
+                animate={hovered && !reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: hovered ? 0.05 : 0 }}
+              >
+                <div className="h-px w-12 mb-8" style={{ backgroundColor: project.color, opacity: 0.6 }} />
+                <span className="text-[10px] tracking-[0.22em] uppercase block mb-5" style={{ color: PALETTE.text.tertiary }}>About this project</span>
+                <p className="text-[14px] md:text-[15px] leading-[1.75] mb-10" style={{ color: PALETTE.text.secondary }}>
                   {project.description}
                 </p>
-              </div>
-
-              {/* Scope tags */}
-              <div>
-                <div
-                  className="h-px w-full mb-6"
-                  style={{ backgroundColor: PALETTE.border }}
-                />
-                <div className="flex flex-wrap gap-2">
-                  {project.scope.map((s) => (
-                    <span
-                      key={s}
-                      className="text-[12px] px-3 py-1.5 rounded-full transition-all duration-300 group-hover:border-opacity-100"
-                      style={{
-                        color: PALETTE.text.tertiary,
-                        border: `1px solid ${PALETTE.border}`,
-                      }}
-                    >
-                      {s}
-                    </span>
-                  ))}
+                <div>
+                  <span className="text-[10px] tracking-[0.22em] uppercase block mb-4" style={{ color: PALETTE.text.tertiary }}>Scope</span>
+                  <div className="flex flex-wrap gap-2">
+                    {project.scope.map((s, si) => (
+                      <motion.span
+                        key={s}
+                        className="text-[11px] tracking-[0.06em] px-3 py-1.5 rounded-full"
+                        style={{ color: project.color, border: `1px solid ${project.color}30`, backgroundColor: `${project.color}08` }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={hovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+                        transition={{ duration: 0.4, delay: hovered ? 0.18 + si * 0.06 : 0, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        {s}
+                      </motion.span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </motion.div>
+
+              {/* Idle placeholder */}
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center"
+                animate={hovered && !reduce ? { opacity: 0, scale: 0.96 } : { opacity: 1, scale: 1 }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                aria-hidden="true"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="h-12 w-px" style={{ background: `linear-gradient(to bottom, transparent, ${project.color}40, transparent)` }} />
+                  <span className="text-[10px] tracking-[0.28em] uppercase" style={{ color: PALETTE.text.tertiary, writingMode: "vertical-rl" }}>
+                    Hover to explore
+                  </span>
+                  <div className="h-12 w-px" style={{ background: `linear-gradient(to bottom, ${project.color}40, transparent)` }} />
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+
+          {/* Bottom color sweep */}
+          <motion.div
+            aria-hidden="true"
+            className="absolute bottom-0 left-0 h-[2px] rounded-full pointer-events-none"
+            style={{ backgroundColor: project.color }}
+            animate={hovered && !reduce ? { width: "100%", opacity: 0.7 } : { width: "0%", opacity: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          />
+        </motion.div>
       </a>
     </motion.div>
   );
@@ -751,133 +870,160 @@ function SelectedWork() {
   return (
     <section id="work" className="relative py-24 md:py-40">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
-        {/* Section header */}
-        <div className="mb-16 md:mb-24">
-          <div className="flex items-end justify-between">
-            <div>
-              <LineReveal>
-                <span
-                  className="text-[11px] tracking-[0.2em] uppercase block mb-4"
-                  style={{ color: PALETTE.text.tertiary }}
-                >
-                  Selected Projects
-                </span>
-              </LineReveal>
-              <LineReveal delay={0.1}>
-                <h2
-                  className="text-[clamp(2.5rem,6vw,5rem)] font-medium tracking-[-0.04em] leading-[1]"
-                  style={{ color: PALETTE.text.primary }}
-                >
-                  Work
-                </h2>
-              </LineReveal>
-            </div>
-            <LineReveal delay={0.2}>
-              <span
-                className="hidden md:block text-[13px] tracking-[0.1em] uppercase"
-                style={{ color: PALETTE.text.tertiary }}
-              >
-                2026
+        <div className="mb-20 md:mb-32">
+          <div className="flex items-start justify-between mb-6">
+            <LineReveal>
+              <span className="text-[11px] tracking-[0.22em] uppercase" style={{ color: PALETTE.text.tertiary }}>
+                Selected Projects
               </span>
             </LineReveal>
+            <FadeReveal delay={0.3}>
+              <span className="hidden md:block text-[11px] tracking-[0.15em] uppercase" style={{ color: PALETTE.text.tertiary, fontFamily: "'JetBrains Mono', monospace" }}>
+                {String(projects.length).padStart(2, "0")} Projects
+              </span>
+            </FadeReveal>
           </div>
+
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 md:gap-0">
+            <LineReveal delay={0.06}>
+              <h2 className="font-medium tracking-[-0.05em] leading-[0.9]" style={{ fontSize: "clamp(3.5rem,9vw,8.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+                Work
+              </h2>
+            </LineReveal>
+            <FadeReveal delay={0.25} className="md:max-w-[28ch]">
+              <p className="text-[14px] md:text-[15px] leading-[1.7]" style={{ color: PALETTE.text.secondary }}>
+                Every project starts with a problem. This is what came out the other side.
+              </p>
+            </FadeReveal>
+          </div>
+
           <motion.div
-            className="h-px w-full mt-8"
+            aria-hidden="true"
+            className="h-px w-full mt-10 origin-left"
             style={{ backgroundColor: PALETTE.border }}
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
 
-        {/* Projects */}
-        <div className="space-y-10 md:space-y-16">
+        <div className="space-y-6 md:space-y-8">
           {projects.map((project, i) => (
             <ProjectCard key={project.title} project={project} index={i} />
           ))}
         </div>
+
+        <FadeReveal delay={0.2}>
+          <div className="mt-16 md:mt-24 flex items-center gap-6">
+            <div className="h-px flex-1" style={{ backgroundColor: PALETTE.border }} />
+            <span className="text-[11px] tracking-[0.18em] uppercase" style={{ color: PALETTE.text.tertiary }}>More coming soon</span>
+            <div className="h-px flex-1" style={{ backgroundColor: PALETTE.border }} />
+          </div>
+        </FadeReveal>
       </div>
     </section>
   );
 }
 
-/* ─── CAPABILITIES / WHAT I DO ─── */
+/* ─── CAPABILITIES ─── */
 
 function Capabilities() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, amount: 0.15 });
+
+  const sizeMap = {
+    sm: { fontSize: "clamp(0.8rem,1.8vw,1.1rem)", padding: "10px 20px" },
+    md: { fontSize: "clamp(1rem,2.2vw,1.4rem)", padding: "12px 24px" },
+    lg: { fontSize: "clamp(1.25rem,2.8vw,1.85rem)", padding: "16px 32px" },
+  };
 
   return (
-    <section className="py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} className="py-28 md:py-44 overflow-hidden">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          {/* Left: label */}
-          <div className="lg:col-span-4">
+        <div className="grid lg:grid-cols-12 gap-8 mb-20 md:mb-28 items-end">
+          <div className="lg:col-span-5">
             <LineReveal>
-              <span
-                className="text-[11px] tracking-[0.2em] uppercase block mb-4"
-                style={{ color: PALETTE.text.tertiary }}
-              >
-                Capabilities
+              <span className="text-[11px] tracking-[0.2em] uppercase block mb-5" style={{ color: PALETTE.text.tertiary }}>
+                The full picture
               </span>
             </LineReveal>
-            <LineReveal delay={0.1}>
-              <h2
-                className="text-[clamp(2rem,4vw,3rem)] font-medium tracking-[-0.03em] leading-[1.1]"
-                style={{ color: PALETTE.text.primary }}
-              >
-                What I do
+            <LineReveal delay={0.08}>
+              <h2 className="tracking-[-0.05em] leading-[0.92]" style={{ fontSize: "clamp(3rem,7vw,6rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+                From first sketch<br />
+                <span style={{ color: PALETTE.text.secondary }}>to live product.</span>
               </h2>
             </LineReveal>
-            <FadeReveal delay={0.3}>
-              <p
-                className="mt-6 text-[15px] leading-[1.7] max-w-[34ch]"
-                style={{ color: PALETTE.text.secondary }}
-              >
-                End-to-end digital craft — from initial strategy through design,
-                development, and launch. Every project is built, not assembled.
-              </p>
-            </FadeReveal>
           </div>
+          <FadeReveal delay={0.25} className="lg:col-span-5 lg:col-start-8">
+            <p className="text-[15px] md:text-[16px] leading-[1.75]" style={{ color: PALETTE.text.secondary }}>
+              Strategy, design, and code under one roof — no handoffs, no miscommunications, no one to blame but me. Every project runs from the brief to the browser without leaving my hands.
+            </p>
+          </FadeReveal>
+        </div>
 
-          {/* Right: capabilities list */}
-          <div className="lg:col-span-8">
-            <div>
-              {capabilities.map((cap, i) => (
-                <FadeReveal key={cap} delay={i * 0.06}>
-                  <div
-                    className="group flex items-center justify-between py-5 md:py-6 border-b transition-colors duration-500 cursor-default"
-                    style={{ borderColor: PALETTE.border }}
+        {/* Scattered pill cloud */}
+        <div className="space-y-5 md:space-y-6">
+          <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-5">
+            {capabilities.slice(0, 5).map((cap, i) => {
+              const sz = sizeMap[CAP_SIZES[i]];
+              return (
+                <motion.div
+                  key={cap}
+                  className="rounded-full border cursor-default select-none"
+                  style={{ borderColor: PALETTE.border, backgroundColor: PALETTE.surface, padding: sz.padding }}
+                  initial={reduce ? false : { opacity: 0, y: 30, scale: 0.92 }}
+                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                  transition={{ duration: 0.75, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={reduce ? {} : { scale: 1.05, borderColor: PALETTE.text.accent, transition: { duration: 0.25 } }}
+                >
+                  <span
+                    className="font-medium tracking-[-0.02em] transition-colors duration-300"
+                    style={{ fontSize: sz.fontSize, color: PALETTE.text.secondary }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = PALETTE.text.accent)}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = PALETTE.text.secondary)}
                   >
-                    <div className="flex items-center gap-6">
-                      <span
-                        className="text-[11px] tabular-nums tracking-wider"
-                        style={{ color: PALETTE.text.tertiary }}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span
-                        className="text-[clamp(1rem,2.5vw,1.5rem)] font-medium tracking-[-0.02em] transition-colors duration-500 group-hover:translate-x-2"
-                        style={{
-                          color: PALETTE.text.secondary,
-                          transition: "color 0.5s, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.color = PALETTE.text.primary)}
-                        onMouseLeave={(e) => (e.currentTarget.style.color = PALETTE.text.secondary)}
-                      >
-                        {cap}
-                      </span>
-                    </div>
-                    <Minus
-                      className="h-4 w-4 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:rotate-90"
-                      style={{ color: PALETTE.text.accent }}
-                    />
-                  </div>
-                </FadeReveal>
-              ))}
-            </div>
+                    {cap}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
+          <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-5 lg:pl-[8%]">
+            {capabilities.slice(5).map((cap, i) => {
+              const gi = i + 5;
+              const sz = sizeMap[CAP_SIZES[gi]];
+              return (
+                <motion.div
+                  key={cap}
+                  className="rounded-full border cursor-default select-none"
+                  style={{ borderColor: PALETTE.border, backgroundColor: PALETTE.surface, padding: sz.padding }}
+                  initial={reduce ? false : { opacity: 0, y: 30, scale: 0.92 }}
+                  animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                  transition={{ duration: 0.75, delay: gi * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                  whileHover={reduce ? {} : { scale: 1.05, borderColor: PALETTE.text.accent, transition: { duration: 0.25 } }}
+                >
+                  <span
+                    className="font-medium tracking-[-0.02em] transition-colors duration-300"
+                    style={{ fontSize: sz.fontSize, color: PALETTE.text.secondary }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = PALETTE.text.accent)}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = PALETTE.text.secondary)}
+                  >
+                    {cap}
+                  </span>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
+
+        <FadeReveal delay={0.7}>
+          <div className="mt-20 md:mt-28 flex items-center gap-4">
+            <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: PALETTE.text.accent }} />
+            <div className="h-px flex-1" style={{ backgroundColor: PALETTE.border }} />
+          </div>
+        </FadeReveal>
       </div>
     </section>
   );
@@ -888,112 +1034,64 @@ function Capabilities() {
 function About() {
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
   const imageY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="py-24 md:py-40"
-    >
+    <section id="about" ref={sectionRef} className="py-24 md:py-40">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
-          {/* Photo — editorial treatment */}
           <FadeReveal className="lg:col-span-5">
-            <motion.div
-              className="relative"
-              style={reduce ? {} : { y: imageY }}
-            >
+            <motion.div className="relative" style={reduce ? {} : { y: imageY }}>
               <div className="relative rounded-[20px] overflow-hidden aspect-[4/5]">
                 <Image
                   src="/images/weed-about.png"
-                  alt="Weed Kerwing"
+                  alt="Weed Kerwing at work in Santo Domingo, Dominican Republic"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 1024px) 90vw, 40vw"
                 />
-                {/* Cinematic overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#060606]/40 via-transparent to-[#060606]/20" />
+                <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#060606]/40 via-transparent to-[#060606]/20" />
               </div>
-              {/* Caption */}
               <div className="mt-4 flex items-center justify-between">
-                <span
-                  className="text-[11px] tracking-[0.15em] uppercase"
-                  style={{ color: PALETTE.text.tertiary }}
-                >
-                  Santo Domingo, DR
-                </span>
-                <span
-                  className="text-[11px] tracking-[0.15em] uppercase"
-                  style={{ color: PALETTE.text.tertiary }}
-                >
-                  Est. 2026
-                </span>
+                <span className="text-[11px] tracking-[0.15em] uppercase" style={{ color: PALETTE.text.tertiary }}>Santo Domingo, DR</span>
+                <span className="text-[11px] tracking-[0.15em] uppercase" style={{ color: PALETTE.text.tertiary, fontFamily: "'JetBrains Mono', monospace" }}>Est. 2024</span>
               </div>
             </motion.div>
           </FadeReveal>
 
-          {/* Bio */}
           <div className="lg:col-span-7 flex flex-col justify-center">
             <LineReveal>
-              <span
-                className="text-[11px] tracking-[0.2em] uppercase block mb-4"
-                style={{ color: PALETTE.text.tertiary }}
-              >
-                About
-              </span>
+              <span className="text-[11px] tracking-[0.2em] uppercase block mb-4" style={{ color: PALETTE.text.tertiary }}>The person behind it</span>
             </LineReveal>
             <LineReveal delay={0.1}>
-              <h2
-                className="text-[clamp(2rem,4vw,3.5rem)] font-medium tracking-[-0.04em] leading-[1.1] mb-10"
-                style={{ color: PALETTE.text.primary }}
-              >
+              <h2 className="tracking-[-0.04em] leading-[1.05] mb-10" style={{ fontSize: "clamp(2rem,4vw,3.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
                 I don&apos;t make websites.
                 <br />
-                <span style={{ color: PALETTE.text.secondary }}>
-                  I make businesses look real.
-                </span>
+                <span style={{ color: PALETTE.text.secondary }}>I make businesses look real.</span>
               </h2>
             </LineReveal>
 
             <div className="space-y-6">
-              <FadeReveal delay={0.2}>
-                <p
-                  className="text-[16px] md:text-[17px] leading-[1.75] max-w-[52ch]"
-                  style={{ color: PALETTE.text.secondary }}
-                >
-                  I design and build premium websites, digital products, and AI-powered
-                  experiences that help businesses establish a stronger presence,
-                  communicate their value, and convert visitors into customers.
-                </p>
-              </FadeReveal>
-              <FadeReveal delay={0.3}>
-                <p
-                  className="text-[16px] md:text-[17px] leading-[1.75] max-w-[52ch]"
-                  style={{ color: PALETTE.text.secondary }}
-                >
-                  I combine strategy, visual design, development, automation, and
-                  artificial intelligence to take projects from concept to a live,
-                  functional product — not a mockup, not a prototype, a real thing
-                  that works.
-                </p>
-              </FadeReveal>
-              <FadeReveal delay={0.4}>
-                <p
-                  className="text-[16px] md:text-[17px] leading-[1.75] max-w-[52ch]"
-                  style={{ color: PALETTE.text.secondary }}
-                >
-                  Based in the Dominican Republic. Working with local businesses and
-                  international clients who need more than a template.
+              {[
+                "Most of my clients come to me after one of two things happened: either they built something themselves and realized it was holding them back, or they paid someone to build something and got a template with their logo on it. I fix both problems. I design and develop from scratch — strategy first, then design, then code — and I don't stop until the thing actually works in the real world.",
+                "What I do isn't complicated to describe: I take what a business is, figure out what it needs to say, and build the digital thing that says it. That involves UI/UX design, frontend development, automation, and wherever it makes sense — AI. Not AI for the sake of AI. AI because sometimes the right tool for a specific problem is a language model, and I know how to connect those things to something that ships.",
+                "I'm based in Santo Domingo. Some of my clients are down the street. Some are overseas. What they have in common is that they needed something that didn't look like everything else, and they were done settling for it.",
+              ].map((text, i) => (
+                <FadeReveal key={i} delay={i * 0.1 + 0.2}>
+                  <p className="text-[16px] md:text-[17px] leading-[1.75] max-w-[52ch]" style={{ color: PALETTE.text.secondary }}>
+                    {text}
+                  </p>
+                </FadeReveal>
+              ))}
+              <FadeReveal delay={0.6}>
+                <p className="text-[15px] italic mt-2" style={{ color: PALETTE.text.tertiary, fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: "italic" }}>
+                  The work either speaks for itself or it doesn&apos;t. Scroll up.
                 </p>
               </FadeReveal>
             </div>
 
-            {/* Social */}
-            <FadeReveal delay={0.5}>
+            <FadeReveal delay={0.7}>
               <div className="mt-12">
                 <a
                   href="https://www.instagram.com/weeddoesitalll"
@@ -1001,28 +1099,12 @@ function About() {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-4 transition-all duration-300"
                 >
-                  <div
-                    className="h-12 w-12 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                    style={{
-                      backgroundColor: `${PALETTE.text.primary}06`,
-                      border: `1px solid ${PALETTE.border}`,
-                    }}
-                  >
+                  <div className="h-12 w-12 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110" style={{ border: `1px solid ${PALETTE.border}` }}>
                     <Instagram className="h-[18px] w-[18px]" style={{ color: PALETTE.text.secondary }} />
                   </div>
                   <div>
-                    <span
-                      className="text-[14px] font-medium block transition-colors duration-300"
-                      style={{ color: PALETTE.text.primary }}
-                    >
-                      @weeddoesitalll
-                    </span>
-                    <span
-                      className="text-[12px] block"
-                      style={{ color: PALETTE.text.tertiary }}
-                    >
-                      Follow the work
-                    </span>
+                    <span className="text-[14px] font-medium block" style={{ color: PALETTE.text.primary }}>@weeddoesitalll</span>
+                    <span className="text-[12px] block" style={{ color: PALETTE.text.tertiary }}>Follow the work</span>
                   </div>
                 </a>
               </div>
@@ -1034,7 +1116,7 @@ function About() {
   );
 }
 
-/* ─── SERVICES & PRICING ─── */
+/* ─── SERVICES ─── */
 
 function Services() {
   const [activeIndex, setActiveIndex] = useState<number | null>(1);
@@ -1042,97 +1124,59 @@ function Services() {
   return (
     <section id="services" className="py-24 md:py-40">
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
-        {/* Header */}
         <div className="mb-16 md:mb-24">
           <LineReveal>
-            <span
-              className="text-[11px] tracking-[0.2em] uppercase block mb-4"
-              style={{ color: PALETTE.text.tertiary }}
-            >
-              Services & Pricing
+            <span className="text-[11px] tracking-[0.2em] uppercase block mb-4" style={{ color: PALETTE.text.tertiary }}>
+              What it costs to work together
             </span>
           </LineReveal>
           <LineReveal delay={0.1}>
-            <h2
-              className="text-[clamp(2.5rem,6vw,5rem)] font-medium tracking-[-0.04em] leading-[1]"
-              style={{ color: PALETTE.text.primary }}
-            >
+            <h2 className="tracking-[-0.04em] leading-[1]" style={{ fontSize: "clamp(2.5rem,6vw,5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
               Three tiers.
               <br />
-              <span style={{ color: PALETTE.text.secondary }}>
-                Zero templates.
-              </span>
+              <span style={{ color: PALETTE.text.secondary }}>Zero templates.</span>
             </h2>
           </LineReveal>
           <FadeReveal delay={0.3}>
-            <p
-              className="mt-6 text-[15px] leading-[1.7] max-w-[48ch]"
-              style={{ color: PALETTE.text.secondary }}
-            >
-              Starting prices in Dominican pesos. Final quote depends on scope,
-              complexity, integrations, and timeline. Every project is custom.
+            <p className="mt-6 text-[15px] leading-[1.7] max-w-[52ch]" style={{ color: PALETTE.text.secondary }}>
+              These are starting points, not ceilings. Every number reflects real work — custom-designed, custom-built, for one client. Your final quote depends on scope and complexity. I'll tell you the number before we start. No surprises.
             </p>
           </FadeReveal>
         </div>
 
-        {/* Pricing — accordion style */}
         <div>
           {services.map((pkg, i) => (
             <FadeReveal key={pkg.name} delay={i * 0.1}>
-              <div
-                className="border-t transition-all duration-500 cursor-pointer"
+              <button
+                className="w-full border-t text-left transition-all duration-500"
                 style={{ borderColor: PALETTE.border }}
                 onClick={() => setActiveIndex(activeIndex === i ? null : i)}
+                aria-expanded={activeIndex === i}
+                aria-controls={`service-panel-${i}`}
+                id={`service-trigger-${i}`}
               >
                 <div className="py-8 md:py-10">
-                  {/* Collapsed row */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-6 md:gap-10">
-                      <span
-                        className="text-[11px] tracking-[0.15em] uppercase tabular-nums"
-                        style={{ color: PALETTE.text.tertiary }}
-                      >
+                      <span className="text-[11px] tracking-[0.15em] uppercase tabular-nums" style={{ color: PALETTE.text.tertiary, fontFamily: "'JetBrains Mono', monospace" }}>
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <div>
-                        <h3
-                          className="text-[clamp(1.25rem,3vw,2rem)] font-medium tracking-[-0.02em]"
-                          style={{ color: activeIndex === i ? PALETTE.text.primary : PALETTE.text.secondary }}
-                        >
+                        <h3 className="tracking-[-0.02em]" style={{ fontSize: "clamp(1.25rem,3vw,2rem)", color: activeIndex === i ? PALETTE.text.primary : PALETTE.text.secondary }} id={`service-heading-${i}`}>
                           {pkg.name}
                           {pkg.featured && (
-                            <span
-                              className="ml-3 text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-full align-middle"
-                              style={{
-                                backgroundColor: `${PALETTE.text.accent}15`,
-                                color: PALETTE.text.accent,
-                              }}
-                            >
+                            <span className="ml-3 text-[10px] tracking-[0.12em] uppercase px-2.5 py-1 rounded-full align-middle" style={{ backgroundColor: `${PALETTE.text.accent}15`, color: PALETTE.text.accent }}>
                               Popular
                             </span>
                           )}
                         </h3>
-                        <span
-                          className="text-[13px] mt-1 block"
-                          style={{ color: PALETTE.text.tertiary }}
-                        >
-                          {pkg.subtitle}
-                        </span>
+                        <span className="text-[13px] mt-1 block" style={{ color: PALETTE.text.tertiary }}>{pkg.subtitle}</span>
                       </div>
                     </div>
-
                     <div className="flex items-center gap-6 md:gap-10">
                       <div className="text-right hidden sm:block">
-                        <span
-                          className="text-[11px] block"
-                          style={{ color: PALETTE.text.tertiary }}
-                        >
-                          From
-                        </span>
-                        <span
-                          className="text-[clamp(1.25rem,2.5vw,1.75rem)] font-medium tracking-[-0.02em]"
-                          style={{ color: PALETTE.text.primary }}
-                        >
+                        <span className="text-[11px] block" style={{ color: PALETTE.text.tertiary }}>From</span>
+                        <span className="tracking-[-0.02em]" style={{ fontSize: "clamp(1.25rem,2.5vw,1.75rem)", color: pkg.featured ? PALETTE.text.accent : PALETTE.text.primary, fontFamily: "'JetBrains Mono', monospace" }}>
                           RD${pkg.price}
                         </span>
                       </div>
@@ -1140,79 +1184,44 @@ function Services() {
                         animate={{ rotate: activeIndex === i ? 45 : 0 }}
                         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <div
-                          className="h-8 w-8 rounded-full flex items-center justify-center text-lg"
-                          style={{
-                            border: `1px solid ${PALETTE.border}`,
-                            color: PALETTE.text.secondary,
-                          }}
-                        >
-                          +
-                        </div>
+                        <div className="h-8 w-8 rounded-full flex items-center justify-center text-lg" style={{ border: `1px solid ${PALETTE.border}`, color: PALETTE.text.secondary }}>+</div>
                       </motion.div>
                     </div>
                   </div>
 
-                  {/* Expanded content */}
                   <AnimatePresence>
                     {activeIndex === i && (
                       <motion.div
+                        id={`service-panel-${i}`}
+                        role="region"
+                        aria-labelledby={`service-heading-${i}`}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                         className="overflow-hidden"
                       >
-                        <div className="pt-8 grid md:grid-cols-2 gap-8 md:gap-16 pl-0 md:pl-[calc(11px+2.5rem)]">
-                          <p
-                            className="text-[15px] leading-[1.7]"
-                            style={{ color: PALETTE.text.secondary }}
-                          >
-                            {pkg.description}
-                          </p>
+                        <div className="pt-8 grid md:grid-cols-2 gap-8 md:gap-16">
+                          <p className="text-[15px] leading-[1.7]" style={{ color: PALETTE.text.secondary }}>{pkg.description}</p>
                           <div>
-                            <span
-                              className="text-[11px] tracking-[0.15em] uppercase block mb-4"
-                              style={{ color: PALETTE.text.tertiary }}
-                            >
-                              Includes
-                            </span>
+                            <span className="text-[11px] tracking-[0.15em] uppercase block mb-4" style={{ color: PALETTE.text.tertiary }}>Includes</span>
                             <ul className="space-y-3">
                               {pkg.includes.map((item) => (
                                 <li key={item} className="flex items-start gap-3">
-                                  <span
-                                    className="mt-2 h-1 w-1 rounded-full shrink-0"
-                                    style={{ backgroundColor: PALETTE.text.accent }}
-                                  />
-                                  <span
-                                    className="text-[14px]"
-                                    style={{ color: PALETTE.text.secondary }}
-                                  >
-                                    {item}
-                                  </span>
+                                  <span className="mt-2 h-1 w-1 rounded-full shrink-0" style={{ backgroundColor: PALETTE.text.accent }} />
+                                  <span className="text-[14px]" style={{ color: PALETTE.text.secondary }}>{item}</span>
                                 </li>
                               ))}
                             </ul>
-
                             <div className="mt-8 sm:hidden">
-                              <span
-                                className="text-[11px] block"
-                                style={{ color: PALETTE.text.tertiary }}
-                              >
-                                Starting from
-                              </span>
-                              <span
-                                className="text-2xl font-medium tracking-[-0.02em]"
-                                style={{ color: PALETTE.text.primary }}
-                              >
-                                RD${pkg.price}
-                              </span>
+                              <span className="text-[11px] block" style={{ color: PALETTE.text.tertiary }}>Starting from</span>
+                              <span className="text-2xl tracking-[-0.02em]" style={{ color: PALETTE.text.primary, fontFamily: "'JetBrains Mono', monospace" }}>RD${pkg.price}</span>
                             </div>
-
                             <a
                               href="#contact"
                               className="inline-flex items-center gap-2 mt-8 text-[13px] tracking-[0.04em] uppercase transition-all duration-300 group"
                               style={{ color: PALETTE.text.accent }}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               Start a project
                               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -1223,11 +1232,15 @@ function Services() {
                     )}
                   </AnimatePresence>
                 </div>
-              </div>
+              </button>
             </FadeReveal>
           ))}
-          {/* Bottom border */}
           <div className="border-t" style={{ borderColor: PALETTE.border }} />
+          <FadeReveal delay={0.4}>
+            <p className="mt-6 text-[11px] tracking-[0.05em]" style={{ color: PALETTE.text.tertiary }}>
+              RD$ — Dominican Pesos. Final quote depends on scope, complexity, integrations, and timeline.
+            </p>
+          </FadeReveal>
         </div>
       </div>
     </section>
@@ -1236,274 +1249,148 @@ function Services() {
 
 /* ─── CONTACT ─── */
 
-function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+function RotatingBadge() {
   const reduce = useReducedMotion();
+  const text = "Available for work · Available for work · ";
 
   return (
-    <section
-      id="contact"
-      className="relative py-24 md:py-40 overflow-hidden"
+    <motion.div
+      className="relative h-[140px] w-[140px] md:h-[160px] md:w-[160px] shrink-0"
+      animate={reduce ? {} : { rotate: 360 }}
+      transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+      aria-hidden="true"
     >
-      {/* Background accent glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute bottom-[-40%] left-[20%] w-[60vw] h-[60vh] rounded-full opacity-[0.03]"
-          style={{ background: `radial-gradient(circle, ${PALETTE.text.accent}, transparent 70%)` }}
-        />
+      <svg viewBox="0 0 160 160" className="w-full h-full">
+        <defs>
+          <path id="badge-circle" d="M 80,80 m -55,0 a 55,55 0 1,1 110,0 a 55,55 0 1,1 -110,0" />
+        </defs>
+        <text style={{ fill: PALETTE.text.secondary, fontSize: "10.5px", letterSpacing: "0.22em" }}>
+          <textPath href="#badge-circle">{text}</textPath>
+        </text>
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: PALETTE.text.accent }} />
+      </div>
+    </motion.div>
+  );
+}
+
+function Contact() {
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+  const headlineY = useTransform(scrollYProgress, [0, 1], [60, -60]);
+
+  return (
+    <section id="contact" ref={sectionRef} className="relative min-h-[80dvh] flex flex-col justify-center overflow-hidden py-32 md:py-48">
+      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+        <div className="absolute bottom-[-30%] left-1/2 -translate-x-1/2 w-[80vw] h-[60vh] rounded-full opacity-[0.055]" style={{ background: `radial-gradient(circle, ${PALETTE.text.accent}, transparent 65%)` }} />
       </div>
 
-      <div className="relative mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
-        {/* Big CTA heading */}
-        <div className="mb-16 md:mb-24">
+      <div className="relative mx-auto max-w-[1440px] w-full px-6 md:px-10 lg:px-16">
+        <FadeReveal className="flex items-center gap-3 mb-12 md:mb-16">
+          <span className={`h-2 w-2 rounded-full ${reduce ? "" : "animate-pulse"}`} style={{ backgroundColor: PALETTE.text.accent }} />
+          <span className="text-[12px] tracking-[0.18em] uppercase" style={{ color: PALETTE.text.accent }}>
+            Available for work — 2026
+          </span>
+        </FadeReveal>
+
+        <motion.div style={reduce ? {} : { y: headlineY }} className="mb-16 md:mb-24">
           <LineReveal>
-            <span
-              className="text-[11px] tracking-[0.2em] uppercase block mb-4"
-              style={{ color: PALETTE.text.tertiary }}
-            >
-              Let&apos;s work together
-            </span>
+            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+              Something&apos;s been
+            </h2>
           </LineReveal>
           <LineReveal delay={0.1}>
-            <h2
-              className="text-[clamp(2.5rem,7vw,6rem)] font-medium tracking-[-0.04em] leading-[1]"
-              style={{ color: PALETTE.text.primary }}
-            >
-              Have a project
+            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.secondary }}>
+              sitting in your
             </h2>
           </LineReveal>
-          <LineReveal delay={0.2}>
-            <h2
-              className="text-[clamp(2.5rem,7vw,6rem)] font-medium tracking-[-0.04em] leading-[1]"
-              style={{ color: PALETTE.text.secondary }}
-            >
-              in mind?
+          <LineReveal delay={0.18}>
+            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
+              head long enough<span style={{ color: PALETTE.text.accent }}>.</span>
             </h2>
           </LineReveal>
-        </div>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
-          {/* Left: Info */}
-          <div className="lg:col-span-4">
-            <FadeReveal>
-              <p
-                className="text-[16px] leading-[1.75] mb-10"
-                style={{ color: PALETTE.text.secondary }}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-6 items-end">
+          <FadeReveal delay={0.3} className="lg:col-span-4">
+            <p className="text-[16px] md:text-[17px] leading-[1.75] mb-10" style={{ color: PALETTE.text.secondary }}>
+              Tell me about the project — what it is, what you need, and when you want it live. I&apos;ll respond within 24 hours.
+            </p>
+            <p className="text-[14px] leading-[1.7]" style={{ color: PALETTE.text.tertiary }}>
+              Santo Domingo, Dominican Republic<br />
+              Open to local &amp; international projects.
+            </p>
+          </FadeReveal>
+
+          <FadeReveal delay={0.42} className="lg:col-span-5 lg:col-start-5">
+            <div className="flex flex-col gap-6">
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/18092934827?text=Hola%20Weed%2C%20me%20interesa%20hablar%20sobre%20un%20proyecto"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-5"
+                aria-label="Contact Weed Kerwing on WhatsApp"
               >
-                I help businesses transform ideas into polished, functional, and
-                commercially focused digital experiences. Tell me what you need.
-              </p>
-            </FadeReveal>
-
-            <FadeReveal delay={0.15}>
-              <div className="space-y-6">
-                <a
-                  href="https://www.instagram.com/weeddoesitalll"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 transition-all duration-300"
-                >
-                  <div
-                    className="h-11 w-11 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                    style={{
-                      border: `1px solid ${PALETTE.border}`,
-                    }}
-                  >
-                    <Instagram className="h-[16px] w-[16px]" style={{ color: PALETTE.text.secondary }} />
-                  </div>
-                  <div>
-                    <span className="text-[13px] block" style={{ color: PALETTE.text.primary }}>
-                      @weeddoesitalll
-                    </span>
-                    <span className="text-[11px] block" style={{ color: PALETTE.text.tertiary }}>
-                      Instagram
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </FadeReveal>
-
-            <FadeReveal delay={0.25}>
-              <div className="mt-10 flex items-center gap-3">
-                <span
-                  className="h-2 w-2 rounded-full animate-pulse"
-                  style={{ backgroundColor: PALETTE.text.accent }}
-                />
-                <span className="text-[13px]" style={{ color: PALETTE.text.accent }}>
-                  Currently accepting new projects
-                </span>
-              </div>
-            </FadeReveal>
-          </div>
-
-          {/* Right: Form */}
-          <FadeReveal delay={0.2} className="lg:col-span-8">
-            <AnimatePresence mode="wait">
-              {submitted ? (
                 <motion.div
-                  key="success"
-                  className="flex items-center justify-center min-h-[400px]"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="relative h-16 w-16 shrink-0 rounded-full flex items-center justify-center overflow-hidden"
+                  style={{ backgroundColor: PALETTE.text.accent }}
+                  whileHover={reduce ? {} : { scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 >
-                  <div className="text-center">
-                    <motion.div
-                      className="h-20 w-20 rounded-full flex items-center justify-center mx-auto mb-8"
-                      style={{ backgroundColor: `${PALETTE.text.accent}12` }}
-                      initial={{ scale: 0, rotate: -180 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", delay: 0.2 }}
-                    >
-                      <Send className="h-7 w-7" style={{ color: PALETTE.text.accent }} />
-                    </motion.div>
-                    <h3
-                      className="text-2xl font-medium mb-3 tracking-[-0.02em]"
-                      style={{ color: PALETTE.text.primary }}
-                    >
-                      Message sent
-                    </h3>
-                    <p className="text-[15px]" style={{ color: PALETTE.text.secondary }}>
-                      I&apos;ll get back to you within 24 hours.
-                    </p>
-                  </div>
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" fill="#060606" aria-hidden="true">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.554 4.107 1.523 5.832L.057 23.885a.75.75 0 0 0 .921.914l6.233-1.635A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.715 9.715 0 0 1-4.96-1.358l-.355-.211-3.696.97.985-3.596-.231-.371A9.713 9.713 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z" />
+                  </svg>
                 </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSubmitted(true);
-                  }}
-                  className="space-y-8"
+                <div>
+                  <span className="text-[18px] md:text-[20px] font-medium tracking-[-0.02em] block transition-colors duration-300 group-hover:opacity-80" style={{ color: PALETTE.text.primary }}>
+                    Message on WhatsApp
+                  </span>
+                  <span className="text-[12px] tracking-[0.08em] uppercase block mt-0.5" style={{ color: PALETTE.text.tertiary }}>
+                    Fastest response
+                  </span>
+                </div>
+              </a>
+
+              <div className="h-px" style={{ backgroundColor: PALETTE.border }} />
+
+              {/* Instagram */}
+              <a
+                href="https://www.instagram.com/weeddoesitalll"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-5"
+                aria-label="Follow Weed Kerwing on Instagram"
+              >
+                <motion.div
+                  className="h-16 w-16 shrink-0 rounded-full flex items-center justify-center"
+                  style={{ border: `1px solid ${PALETTE.borderHover}`, backgroundColor: PALETTE.surface }}
+                  whileHover={reduce ? {} : { scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 >
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-[12px] tracking-[0.1em] uppercase mb-3"
-                        style={{ color: PALETTE.text.tertiary }}
-                      >
-                        Name
-                      </label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        className="w-full bg-transparent border-b pb-3 text-[15px] outline-none transition-all duration-300 focus:border-opacity-100 placeholder:opacity-30"
-                        style={{
-                          color: PALETTE.text.primary,
-                          borderColor: PALETTE.border,
-                        }}
-                        onFocus={(e) => (e.currentTarget.style.borderColor = PALETTE.text.accent)}
-                        onBlur={(e) => (e.currentTarget.style.borderColor = PALETTE.border)}
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-[12px] tracking-[0.1em] uppercase mb-3"
-                        style={{ color: PALETTE.text.tertiary }}
-                      >
-                        Email
-                      </label>
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        required
-                        className="w-full bg-transparent border-b pb-3 text-[15px] outline-none transition-all duration-300 placeholder:opacity-30"
-                        style={{
-                          color: PALETTE.text.primary,
-                          borderColor: PALETTE.border,
-                        }}
-                        onFocus={(e) => (e.currentTarget.style.borderColor = PALETTE.text.accent)}
-                        onBlur={(e) => (e.currentTarget.style.borderColor = PALETTE.border)}
-                        placeholder="you@company.com"
-                      />
-                    </div>
-                  </div>
+                  <Instagram className="h-6 w-6" style={{ color: PALETTE.text.secondary }} />
+                </motion.div>
+                <div>
+                  <span className="text-[18px] md:text-[20px] font-medium tracking-[-0.02em] block transition-colors duration-300 group-hover:opacity-80" style={{ color: PALETTE.text.primary }}>
+                    @weeddoesitalll
+                  </span>
+                  <span className="text-[12px] tracking-[0.08em] uppercase block mt-0.5" style={{ color: PALETTE.text.tertiary }}>See the work</span>
+                </div>
+              </a>
+            </div>
+          </FadeReveal>
 
-                  <div>
-                    <label
-                      htmlFor="service"
-                      className="block text-[12px] tracking-[0.1em] uppercase mb-3"
-                      style={{ color: PALETTE.text.tertiary }}
-                    >
-                      Service
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      className="w-full bg-transparent border-b pb-3 text-[15px] outline-none transition-all duration-300 appearance-none cursor-pointer"
-                      style={{
-                        color: PALETTE.text.secondary,
-                        borderColor: PALETTE.border,
-                      }}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = PALETTE.text.accent)}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = PALETTE.border)}
-                    >
-                      <option value="">Select a service...</option>
-                      <option value="launch">Launch — Landing Page (RD$29K+)</option>
-                      <option value="business">Business — Full Website (RD$59K+)</option>
-                      <option value="premium">Premium — Custom Experience (RD$95K+)</option>
-                      <option value="ecommerce">E-Commerce</option>
-                      <option value="other">Something else</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="message"
-                      className="block text-[12px] tracking-[0.1em] uppercase mb-3"
-                      style={{ color: PALETTE.text.tertiary }}
-                    >
-                      Tell me about your project
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={5}
-                      required
-                      className="w-full bg-transparent border-b pb-3 text-[15px] outline-none transition-all duration-300 resize-none placeholder:opacity-30"
-                      style={{
-                        color: PALETTE.text.primary,
-                        borderColor: PALETTE.border,
-                      }}
-                      onFocus={(e) => (e.currentTarget.style.borderColor = PALETTE.text.accent)}
-                      onBlur={(e) => (e.currentTarget.style.borderColor = PALETTE.border)}
-                      placeholder="Your goals, timeline, and anything else I should know..."
-                    />
-                  </div>
-
-                  <div className="pt-4">
-                    <button
-                      type="submit"
-                      className="group inline-flex items-center gap-4 transition-all duration-500"
-                    >
-                      <span
-                        className="h-14 w-14 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                        style={{
-                          backgroundColor: PALETTE.text.accent,
-                        }}
-                      >
-                        <ArrowRight className="h-5 w-5 text-[#060606] transition-transform duration-300 group-hover:translate-x-0.5" />
-                      </span>
-                      <span
-                        className="text-[15px] font-medium tracking-[-0.01em]"
-                        style={{ color: PALETTE.text.primary }}
-                      >
-                        Send message
-                      </span>
-                    </button>
-                  </div>
-                </motion.form>
-              )}
-            </AnimatePresence>
+          <FadeReveal delay={0.55} className="lg:col-span-3 lg:col-start-10 flex lg:justify-end">
+            <RotatingBadge />
           </FadeReveal>
         </div>
+
+        <FadeReveal delay={0.65}>
+          <div className="mt-20 md:mt-28 h-px w-full" style={{ backgroundColor: PALETTE.border }} />
+        </FadeReveal>
       </div>
     </section>
   );
@@ -1516,18 +1403,11 @@ function Footer() {
     <footer className="border-t py-12 md:py-16" style={{ borderColor: PALETTE.border }}>
       <div className="mx-auto max-w-[1440px] px-6 md:px-10 lg:px-16">
         <div className="grid md:grid-cols-3 gap-8 items-center">
-          {/* Left: Logo */}
           <div>
-            <span
-              className="text-[15px] font-medium tracking-[-0.02em]"
-              style={{ color: PALETTE.text.primary }}
-            >
-              Weed Kerwing
-              <span style={{ color: PALETTE.text.accent }}>.</span>
+            <span className="text-[15px] font-medium tracking-[-0.02em]" style={{ color: PALETTE.text.primary, fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+              Weed Kerwing<span style={{ color: PALETTE.text.accent }}>.</span>
             </span>
           </div>
-
-          {/* Center: Links */}
           <div className="flex items-center justify-start md:justify-center gap-8">
             {["Work", "Services", "About", "Contact"].map((label) => (
               <a
@@ -1542,8 +1422,6 @@ function Footer() {
               </a>
             ))}
           </div>
-
-          {/* Right: Copyright + Social */}
           <div className="flex items-center justify-start md:justify-end gap-6">
             <a
               href="https://www.instagram.com/weeddoesitalll"
@@ -1551,16 +1429,13 @@ function Footer() {
               rel="noopener noreferrer"
               className="transition-colors duration-300"
               style={{ color: PALETTE.text.tertiary }}
+              aria-label="Instagram"
               onMouseEnter={(e) => (e.currentTarget.style.color = PALETTE.text.primary)}
               onMouseLeave={(e) => (e.currentTarget.style.color = PALETTE.text.tertiary)}
-              aria-label="Instagram"
             >
               <Instagram className="h-[16px] w-[16px]" />
             </a>
-            <span
-              className="text-[11px] tracking-[0.08em]"
-              style={{ color: PALETTE.text.tertiary }}
-            >
+            <span className="text-[11px] tracking-[0.08em]" style={{ color: PALETTE.text.tertiary }}>
               &copy; 2026
             </span>
           </div>
@@ -1578,69 +1453,61 @@ export default function WeedKerwingPortfolio() {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400&display=swap');
 
-        html {
-          scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
-          cursor: none;
         }
 
-        @media (max-width: 1024px) {
-          body { cursor: auto; }
+        @media (pointer: fine) {
+          body, a, button, select, input, textarea { cursor: none; }
         }
 
-        a, button, select, input, textarea {
-          cursor: none;
-        }
+        ::selection { background: rgba(200,255,0,0.2); color: #F5F0E8; }
 
-        @media (max-width: 1024px) {
-          a, button, select, input, textarea { cursor: auto; }
-        }
-
-        ::selection {
-          background: rgba(200, 255, 0, 0.2);
-          color: #F5F0E8;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #060606;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(255, 255, 255, 0.15);
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #060606; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 
         @media (prefers-reduced-motion: reduce) {
           html { scroll-behavior: auto; }
-          body { cursor: auto !important; }
-          a, button, select, input, textarea { cursor: auto !important; }
+          *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
         }
+
+        /* Skip link */
+        .skip-link {
+          position: absolute;
+          top: -100%;
+          left: 1rem;
+          z-index: 99999;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          font-size: 14px;
+          font-weight: 500;
+          background: #C8FF00;
+          color: #060606;
+          transition: top 0.2s;
+        }
+        .skip-link:focus { top: 1rem; }
       `}</style>
 
-      <div
-        className="min-h-[100dvh] antialiased"
-        style={{
-          backgroundColor: PALETTE.bg,
-          color: PALETTE.text.primary,
-        }}
-      >
+      <div className="min-h-[100dvh] antialiased" style={{ backgroundColor: PALETTE.bg, color: PALETTE.text.primary }}>
+        {/* Skip navigation */}
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+
         <GrainOverlay />
+        <Vignette />
         <CursorFollower />
+        <WhatsAppFloat />
         <Navbar />
         <Hero />
+        <StatsStrip />
+        <Marquee />
         <SelectedWork />
         <Capabilities />
         <About />
