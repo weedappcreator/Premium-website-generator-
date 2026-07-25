@@ -57,6 +57,16 @@ npm run ollama:pull      # Pull a model (e.g., ollama pull llama3.2)
 
 **System prompt** (`src/lib/prompts/generation.tsx`) — The prompt given to Claude for component generation.
 
+**Design intelligence** (`src/lib/taste-skill.ts`) — Taste Skill anti-slop design system with 3-dial configuration (DESIGN_VARIANCE, MOTION_INTENSITY, VISUAL_DENSITY). Auto-infers dials from user message context.
+
+**Ruflo integration** (`src/lib/ruflo.ts`) — Agent orchestration via Ruflo MCP server. Swarm configs, memory namespaces, and agent team definitions for coordinated website generation.
+
+**Animation libraries** (`src/lib/gsap.ts`, `src/lib/lenis.ts`) — GSAP ScrollTrigger for pin/scrub scroll effects. Lenis for smooth scroll. Both inject context into the system prompt when motion/scroll keywords are detected.
+
+**React Bits** (`src/lib/react-bits.ts`) — 50+ animated component catalog (SplitText, Aurora, SpotlightCard, etc.) injected into prompt when creative/animated components are requested.
+
+**Video export** (`src/lib/hyperframes.ts`, `src/app/api/export-video/route.ts`) — HyperFrames integration for exporting generated websites as MP4 video demos. POST to `/api/export-video` with `{ html, preset, config }`.
+
 ### Auth
 
 JWT tokens in httpOnly cookies (7-day expiry). `src/middleware.ts` protects `/api/projects` and `/api/filesystem`; `/api/chat` is public. `src/actions/index.ts` has server actions for login/signup/logout. Sessions use `jose` for JWT handling and `bcrypt` for password hashing.

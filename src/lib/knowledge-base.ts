@@ -111,7 +111,9 @@ export function detectContextFromPrompt(userMessage: string): KBContext {
   if (msg.includes('cms') || msg.includes('content management')) integrations.push('cms');
   if (msg.includes('email') || msg.includes('newsletter')) integrations.push('email');
   if (msg.includes('seo') || msg.includes('search engine')) integrations.push('seo');
-  if (msg.includes('animation') || msg.includes('motion')) integrations.push('motion');
+  if (msg.includes('animation') || msg.includes('motion') || msg.includes('gsap') || msg.includes('scroll')) integrations.push('motion');
+  if (msg.includes('smooth scroll') || msg.includes('lenis') || msg.includes('buttery')) integrations.push('smooth-scroll');
+  if (msg.includes('video') || msg.includes('export') || msg.includes('mp4') || msg.includes('demo video')) integrations.push('video-export');
   if (integrations.length) context.integrations = integrations;
 
   return context;

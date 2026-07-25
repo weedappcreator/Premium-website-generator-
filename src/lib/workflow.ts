@@ -5,6 +5,10 @@ import { buildStrReplaceTool } from "./tools/str-replace";
 import { buildFileManagerTool } from "./tools/file-manager";
 import { buildFigmaTool } from "./tools/figma";
 import { VirtualFileSystem, type FileNode } from "./file-system";
+import { buildTasteSkillContext } from "./taste-skill";
+import { buildGsapContext } from "./gsap";
+import { buildLenisContext } from "./lenis";
+import { buildReactBitsContext } from "./react-bits";
 
 export interface GenerationResult {
   stream: ReturnType<typeof streamText>["textStream"];
@@ -16,8 +20,16 @@ export async function runGenerationPipeline(
   ctx: GenerationContext,
   existingFiles: Record<string, FileNode> = {}
 ): Promise<GenerationResult> {
-  // Step 1: Build full context from knowledge base
-  const systemPrompt = buildSystemPrompt(ctx);
+  // Step 1: Build full context from knowledge base + integrations
+  const basePrompt = buildSystemPrompt(ctx);
+  const integrations = [
+    buildTasteSkillContext(ctx.userPrompt),
+    buildGsapContext(),
+    buildLenisContext(),
+    buildReactBitsContext(),
+  ].join('\n');
+
+  const systemPrompt = `${basePrompt}\n${integrations}`;
 
   // Step 2: Initialize virtual file system
   const fileSystem = new VirtualFileSystem();

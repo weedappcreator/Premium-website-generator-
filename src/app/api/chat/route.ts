@@ -9,6 +9,10 @@ import { getSession } from "@/lib/auth";
 import { getLanguageModel } from "@/lib/provider";
 import { generationPrompt } from "@/lib/prompts/generation";
 import { buildKBContext, detectContextFromPrompt } from "@/lib/knowledge-base";
+import { buildTasteSkillContext } from "@/lib/taste-skill";
+import { buildLenisContext } from "@/lib/lenis";
+import { buildGsapContext } from "@/lib/gsap";
+import { buildReactBitsContext } from "@/lib/react-bits";
 
 export async function POST(req: Request) {
   const {
@@ -19,22 +23,58 @@ export async function POST(req: Request) {
     await req.json();
 
   const userMessage = messages[messages.length - 1]?.content || '';
-  const kbContext = detectContextFromPrompt(typeof userMessage === 'string' ? userMessage : JSON.stringify(userMessage));
+  const userMessageStr = typeof userMessage === 'string' ? userMessage : JSON.stringify(userMessage);
+  const kbContext = detectContextFromPrompt(userMessageStr);
   const kbContent = buildKBContext(kbContext);
 
-  const enhancedPrompt = kbContent
-    ? `${generationPrompt}
+  // Build enhanced prompt with all integrations
+  const integrationSections: string[] = [];
 
-## Knowledge Base Context
-${kbContent}
+  // Always inject Taste Skill anti-slop design intelligence
+  integrationSections.push(buildTasteSkillContext(userMessageStr));
+
+  // Inject GSAP context when motion/animation is relevant
+  const msg = userMessageStr.toLowerCase();
+  if (msg.includes('animation') || msg.includes('scroll') || msg.includes('gsap')
+    || msg.includes('motion') || msg.includes('parallax') || msg.includes('sticky')
+    || msg.includes('pin') || msg.includes('agency') || msg.includes('awwwards')) {
+    integrationSections.push(buildGsapContext());
+  }
+
+  // Inject Lenis context when smooth scroll is relevant
+  if (msg.includes('smooth') || msg.includes('lenis') || msg.includes('buttery')
+    || msg.includes('premium') || msg.includes('agency') || msg.includes('portfolio')) {
+    integrationSections.push(buildLenisContext());
+  }
+
+  // Inject React Bits context when animated components are relevant
+  if (msg.includes('animated') || msg.includes('effect') || msg.includes('creative')
+    || msg.includes('react-bits') || msg.includes('text effect') || msg.includes('background')
+    || msg.includes('fancy') || msg.includes('interactive')) {
+    integrationSections.push(buildReactBitsContext());
+  }
+
+  // Inject video export context when requested
+  if (msg.includes('video') || msg.includes('export') || msg.includes('mp4') || msg.includes('demo')) {
+    integrationSections.push(`
+## Video Export (HyperFrames)
+When a user asks to export their website as a video demo, use the \`/api/export-video\` endpoint.
+POST with \`{ html, preset, config }\`. Presets: social-clip (1080x1920), demo-landscape (1920x1080), square (1080x1080), story (1080x1920 short), thumbnail.
+The endpoint generates a HyperFrames composition that auto-scrolls through the website and renders it to MP4.
+`);
+  }
+
+  const enhancedPrompt = `${generationPrompt}
+${integrationSections.join('\n')}
+${kbContent ? `\n## Knowledge Base Context\n${kbContent}` : ''}
 
 ## Workflow Rules
 1. Use the loaded skill and design direction to guide your implementation
 2. Apply the design system colors and fonts from the visual direction
 3. Use integrations (auth, payment, analytics, etc.) when relevant
 4. For templates: use \`node src/lib/template-loader.js fetch <name>\` to load from GitHub
-5. Run quality checks before shipping components`
-    : generationPrompt;
+5. Run quality checks before shipping components
+6. Apply Taste Skill anti-slop rules — check the quality gate before presenting work`;
 
   messages.unshift({
     role: "system",
