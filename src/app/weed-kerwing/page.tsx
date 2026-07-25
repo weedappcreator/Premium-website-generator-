@@ -1296,21 +1296,19 @@ function Contact() {
         </FadeReveal>
 
         <motion.div style={reduce ? {} : { y: headlineY }} className="mb-16 md:mb-24">
-          <LineReveal>
-            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
-              Something&apos;s been
-            </h2>
-          </LineReveal>
-          <LineReveal delay={0.1}>
-            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.secondary }}>
-              sitting in your
-            </h2>
-          </LineReveal>
-          <LineReveal delay={0.18}>
-            <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300, color: PALETTE.text.primary }}>
-              head long enough<span style={{ color: PALETTE.text.accent }}>.</span>
-            </h2>
-          </LineReveal>
+          <h2 className="tracking-[-0.05em] leading-[0.88]" style={{ fontSize: "clamp(3.5rem,10vw,9.5rem)", fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 300 }}>
+            <LineReveal>
+              <span className="block" style={{ color: PALETTE.text.primary }}>Something&apos;s been</span>
+            </LineReveal>
+            <LineReveal delay={0.1}>
+              <span className="block" style={{ color: PALETTE.text.secondary }}>sitting in your</span>
+            </LineReveal>
+            <LineReveal delay={0.18}>
+              <span className="block" style={{ color: PALETTE.text.primary }}>
+                head long enough<span style={{ color: PALETTE.text.accent }}>.</span>
+              </span>
+            </LineReveal>
+          </h2>
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-6 items-end">
@@ -1453,12 +1451,10 @@ export default function WeedKerwingPortfolio() {
   return (
     <>
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400&display=swap');
-
         html { scroll-behavior: smooth; }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+          font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
         }
