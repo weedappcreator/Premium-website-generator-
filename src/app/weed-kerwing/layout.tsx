@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Syne, Inter, JetBrains_Mono } from "next/font/google";
+import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 
-const syne = Syne({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "700", "900"],
+  style: ["normal", "italic"],
   variable: "--font-display",
   display: "swap",
 });
@@ -39,7 +40,7 @@ export default function WeedKerwingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <div className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       {children}
     </div>
   );
