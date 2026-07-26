@@ -1,23 +1,20 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 
-const playfair = Playfair_Display({
+/* Bricolage Grotesque — variable 200–800, geometric with personality.
+   NOT Syne, NOT Cormorant, NOT Playfair. A real design choice.
+   Weight 800 at 14vw = massive editorial statement.
+   Weight 300 at 16px = clean, readable, minimal. */
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "700", "900"],
-  style: ["normal", "italic"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
   variable: "--font-display",
   display: "swap",
 });
 
-const inter = Inter({
+const mono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
 });
@@ -40,7 +37,7 @@ export default function WeedKerwingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
+    <div className={`${bricolage.variable} ${mono.variable}`}>
       {children}
     </div>
   );
