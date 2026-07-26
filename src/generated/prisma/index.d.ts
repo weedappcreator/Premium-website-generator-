@@ -28,6 +28,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
+/**
+ * Model SubdomainOrder
+ * 
+ */
+export type SubdomainOrder = $Result.DefaultSelection<Prisma.$SubdomainOrderPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -45,7 +50,7 @@ export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -77,13 +82,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Executes a prepared raw query and returns the number of affected rows.
@@ -183,6 +181,16 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.subdomainOrder`: Exposes CRUD operations for the **SubdomainOrder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SubdomainOrders
+    * const subdomainOrders = await prisma.subdomainOrder.findMany()
+    * ```
+    */
+  get subdomainOrder(): Prisma.SubdomainOrderDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -241,8 +249,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.10.1
-   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+   * Prisma Client JS version: 6.19.3
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
@@ -255,6 +263,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -625,7 +634,8 @@ export namespace Prisma {
   export const ModelName: {
     Task: 'Task',
     User: 'User',
-    Project: 'Project'
+    Project: 'Project',
+    SubdomainOrder: 'SubdomainOrder'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -644,7 +654,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "task" | "user" | "project"
+      modelProps: "task" | "user" | "project" | "subdomainOrder"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -870,6 +880,80 @@ export namespace Prisma {
           }
         }
       }
+      SubdomainOrder: {
+        payload: Prisma.$SubdomainOrderPayload<ExtArgs>
+        fields: Prisma.SubdomainOrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SubdomainOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SubdomainOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          findFirst: {
+            args: Prisma.SubdomainOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SubdomainOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          findMany: {
+            args: Prisma.SubdomainOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>[]
+          }
+          create: {
+            args: Prisma.SubdomainOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          createMany: {
+            args: Prisma.SubdomainOrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SubdomainOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>[]
+          }
+          delete: {
+            args: Prisma.SubdomainOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          update: {
+            args: Prisma.SubdomainOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.SubdomainOrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SubdomainOrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SubdomainOrderUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>[]
+          }
+          upsert: {
+            args: Prisma.SubdomainOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SubdomainOrderPayload>
+          }
+          aggregate: {
+            args: Prisma.SubdomainOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSubdomainOrder>
+          }
+          groupBy: {
+            args: Prisma.SubdomainOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SubdomainOrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SubdomainOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<SubdomainOrderCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -913,16 +997,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -937,6 +1029,10 @@ export namespace Prisma {
       timeout?: number
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
+    /**
+     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
+     */
+    adapter?: runtime.SqlDriverAdapterFactory | null
     /**
      * Global configuration for omitting model fields by default.
      * 
@@ -957,6 +1053,7 @@ export namespace Prisma {
     task?: TaskOmit
     user?: UserOmit
     project?: ProjectOmit
+    subdomainOrder?: SubdomainOrderOmit
   }
 
   /* Types for Logging */
@@ -966,10 +1063,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1009,25 +1111,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -4283,6 +4366,1176 @@ export namespace Prisma {
 
 
   /**
+   * Model SubdomainOrder
+   */
+
+  export type AggregateSubdomainOrder = {
+    _count: SubdomainOrderCountAggregateOutputType | null
+    _avg: SubdomainOrderAvgAggregateOutputType | null
+    _sum: SubdomainOrderSumAggregateOutputType | null
+    _min: SubdomainOrderMinAggregateOutputType | null
+    _max: SubdomainOrderMaxAggregateOutputType | null
+  }
+
+  export type SubdomainOrderAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type SubdomainOrderSumAggregateOutputType = {
+    price: number | null
+  }
+
+  export type SubdomainOrderMinAggregateOutputType = {
+    id: string | null
+    subdomain: string | null
+    rootDomain: string | null
+    fullDomain: string | null
+    target: string | null
+    recordType: string | null
+    clientName: string | null
+    clientEmail: string | null
+    clientPhone: string | null
+    price: number | null
+    currency: string | null
+    status: string | null
+    cfRecordId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SubdomainOrderMaxAggregateOutputType = {
+    id: string | null
+    subdomain: string | null
+    rootDomain: string | null
+    fullDomain: string | null
+    target: string | null
+    recordType: string | null
+    clientName: string | null
+    clientEmail: string | null
+    clientPhone: string | null
+    price: number | null
+    currency: string | null
+    status: string | null
+    cfRecordId: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SubdomainOrderCountAggregateOutputType = {
+    id: number
+    subdomain: number
+    rootDomain: number
+    fullDomain: number
+    target: number
+    recordType: number
+    clientName: number
+    clientEmail: number
+    clientPhone: number
+    price: number
+    currency: number
+    status: number
+    cfRecordId: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SubdomainOrderAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type SubdomainOrderSumAggregateInputType = {
+    price?: true
+  }
+
+  export type SubdomainOrderMinAggregateInputType = {
+    id?: true
+    subdomain?: true
+    rootDomain?: true
+    fullDomain?: true
+    target?: true
+    recordType?: true
+    clientName?: true
+    clientEmail?: true
+    clientPhone?: true
+    price?: true
+    currency?: true
+    status?: true
+    cfRecordId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SubdomainOrderMaxAggregateInputType = {
+    id?: true
+    subdomain?: true
+    rootDomain?: true
+    fullDomain?: true
+    target?: true
+    recordType?: true
+    clientName?: true
+    clientEmail?: true
+    clientPhone?: true
+    price?: true
+    currency?: true
+    status?: true
+    cfRecordId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SubdomainOrderCountAggregateInputType = {
+    id?: true
+    subdomain?: true
+    rootDomain?: true
+    fullDomain?: true
+    target?: true
+    recordType?: true
+    clientName?: true
+    clientEmail?: true
+    clientPhone?: true
+    price?: true
+    currency?: true
+    status?: true
+    cfRecordId?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SubdomainOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubdomainOrder to aggregate.
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubdomainOrders to fetch.
+     */
+    orderBy?: SubdomainOrderOrderByWithRelationInput | SubdomainOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SubdomainOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubdomainOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubdomainOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SubdomainOrders
+    **/
+    _count?: true | SubdomainOrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SubdomainOrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubdomainOrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SubdomainOrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SubdomainOrderMaxAggregateInputType
+  }
+
+  export type GetSubdomainOrderAggregateType<T extends SubdomainOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateSubdomainOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSubdomainOrder[P]>
+      : GetScalarType<T[P], AggregateSubdomainOrder[P]>
+  }
+
+
+
+
+  export type SubdomainOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SubdomainOrderWhereInput
+    orderBy?: SubdomainOrderOrderByWithAggregationInput | SubdomainOrderOrderByWithAggregationInput[]
+    by: SubdomainOrderScalarFieldEnum[] | SubdomainOrderScalarFieldEnum
+    having?: SubdomainOrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SubdomainOrderCountAggregateInputType | true
+    _avg?: SubdomainOrderAvgAggregateInputType
+    _sum?: SubdomainOrderSumAggregateInputType
+    _min?: SubdomainOrderMinAggregateInputType
+    _max?: SubdomainOrderMaxAggregateInputType
+  }
+
+  export type SubdomainOrderGroupByOutputType = {
+    id: string
+    subdomain: string
+    rootDomain: string
+    fullDomain: string
+    target: string
+    recordType: string
+    clientName: string
+    clientEmail: string
+    clientPhone: string | null
+    price: number
+    currency: string
+    status: string
+    cfRecordId: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SubdomainOrderCountAggregateOutputType | null
+    _avg: SubdomainOrderAvgAggregateOutputType | null
+    _sum: SubdomainOrderSumAggregateOutputType | null
+    _min: SubdomainOrderMinAggregateOutputType | null
+    _max: SubdomainOrderMaxAggregateOutputType | null
+  }
+
+  type GetSubdomainOrderGroupByPayload<T extends SubdomainOrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SubdomainOrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SubdomainOrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SubdomainOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], SubdomainOrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SubdomainOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subdomain?: boolean
+    rootDomain?: boolean
+    fullDomain?: boolean
+    target?: boolean
+    recordType?: boolean
+    clientName?: boolean
+    clientEmail?: boolean
+    clientPhone?: boolean
+    price?: boolean
+    currency?: boolean
+    status?: boolean
+    cfRecordId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subdomainOrder"]>
+
+  export type SubdomainOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subdomain?: boolean
+    rootDomain?: boolean
+    fullDomain?: boolean
+    target?: boolean
+    recordType?: boolean
+    clientName?: boolean
+    clientEmail?: boolean
+    clientPhone?: boolean
+    price?: boolean
+    currency?: boolean
+    status?: boolean
+    cfRecordId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subdomainOrder"]>
+
+  export type SubdomainOrderSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    subdomain?: boolean
+    rootDomain?: boolean
+    fullDomain?: boolean
+    target?: boolean
+    recordType?: boolean
+    clientName?: boolean
+    clientEmail?: boolean
+    clientPhone?: boolean
+    price?: boolean
+    currency?: boolean
+    status?: boolean
+    cfRecordId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["subdomainOrder"]>
+
+  export type SubdomainOrderSelectScalar = {
+    id?: boolean
+    subdomain?: boolean
+    rootDomain?: boolean
+    fullDomain?: boolean
+    target?: boolean
+    recordType?: boolean
+    clientName?: boolean
+    clientEmail?: boolean
+    clientPhone?: boolean
+    price?: boolean
+    currency?: boolean
+    status?: boolean
+    cfRecordId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SubdomainOrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "subdomain" | "rootDomain" | "fullDomain" | "target" | "recordType" | "clientName" | "clientEmail" | "clientPhone" | "price" | "currency" | "status" | "cfRecordId" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["subdomainOrder"]>
+
+  export type $SubdomainOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SubdomainOrder"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      subdomain: string
+      rootDomain: string
+      fullDomain: string
+      target: string
+      recordType: string
+      clientName: string
+      clientEmail: string
+      clientPhone: string | null
+      price: number
+      currency: string
+      status: string
+      cfRecordId: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["subdomainOrder"]>
+    composites: {}
+  }
+
+  type SubdomainOrderGetPayload<S extends boolean | null | undefined | SubdomainOrderDefaultArgs> = $Result.GetResult<Prisma.$SubdomainOrderPayload, S>
+
+  type SubdomainOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SubdomainOrderFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SubdomainOrderCountAggregateInputType | true
+    }
+
+  export interface SubdomainOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubdomainOrder'], meta: { name: 'SubdomainOrder' } }
+    /**
+     * Find zero or one SubdomainOrder that matches the filter.
+     * @param {SubdomainOrderFindUniqueArgs} args - Arguments to find a SubdomainOrder
+     * @example
+     * // Get one SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SubdomainOrderFindUniqueArgs>(args: SelectSubset<T, SubdomainOrderFindUniqueArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SubdomainOrder that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SubdomainOrderFindUniqueOrThrowArgs} args - Arguments to find a SubdomainOrder
+     * @example
+     * // Get one SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SubdomainOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, SubdomainOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubdomainOrder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderFindFirstArgs} args - Arguments to find a SubdomainOrder
+     * @example
+     * // Get one SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SubdomainOrderFindFirstArgs>(args?: SelectSubset<T, SubdomainOrderFindFirstArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SubdomainOrder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderFindFirstOrThrowArgs} args - Arguments to find a SubdomainOrder
+     * @example
+     * // Get one SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SubdomainOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, SubdomainOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SubdomainOrders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SubdomainOrders
+     * const subdomainOrders = await prisma.subdomainOrder.findMany()
+     * 
+     * // Get first 10 SubdomainOrders
+     * const subdomainOrders = await prisma.subdomainOrder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const subdomainOrderWithIdOnly = await prisma.subdomainOrder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SubdomainOrderFindManyArgs>(args?: SelectSubset<T, SubdomainOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SubdomainOrder.
+     * @param {SubdomainOrderCreateArgs} args - Arguments to create a SubdomainOrder.
+     * @example
+     * // Create one SubdomainOrder
+     * const SubdomainOrder = await prisma.subdomainOrder.create({
+     *   data: {
+     *     // ... data to create a SubdomainOrder
+     *   }
+     * })
+     * 
+     */
+    create<T extends SubdomainOrderCreateArgs>(args: SelectSubset<T, SubdomainOrderCreateArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SubdomainOrders.
+     * @param {SubdomainOrderCreateManyArgs} args - Arguments to create many SubdomainOrders.
+     * @example
+     * // Create many SubdomainOrders
+     * const subdomainOrder = await prisma.subdomainOrder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SubdomainOrderCreateManyArgs>(args?: SelectSubset<T, SubdomainOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SubdomainOrders and returns the data saved in the database.
+     * @param {SubdomainOrderCreateManyAndReturnArgs} args - Arguments to create many SubdomainOrders.
+     * @example
+     * // Create many SubdomainOrders
+     * const subdomainOrder = await prisma.subdomainOrder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SubdomainOrders and only return the `id`
+     * const subdomainOrderWithIdOnly = await prisma.subdomainOrder.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SubdomainOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, SubdomainOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SubdomainOrder.
+     * @param {SubdomainOrderDeleteArgs} args - Arguments to delete one SubdomainOrder.
+     * @example
+     * // Delete one SubdomainOrder
+     * const SubdomainOrder = await prisma.subdomainOrder.delete({
+     *   where: {
+     *     // ... filter to delete one SubdomainOrder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SubdomainOrderDeleteArgs>(args: SelectSubset<T, SubdomainOrderDeleteArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SubdomainOrder.
+     * @param {SubdomainOrderUpdateArgs} args - Arguments to update one SubdomainOrder.
+     * @example
+     * // Update one SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SubdomainOrderUpdateArgs>(args: SelectSubset<T, SubdomainOrderUpdateArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SubdomainOrders.
+     * @param {SubdomainOrderDeleteManyArgs} args - Arguments to filter SubdomainOrders to delete.
+     * @example
+     * // Delete a few SubdomainOrders
+     * const { count } = await prisma.subdomainOrder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SubdomainOrderDeleteManyArgs>(args?: SelectSubset<T, SubdomainOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubdomainOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SubdomainOrders
+     * const subdomainOrder = await prisma.subdomainOrder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SubdomainOrderUpdateManyArgs>(args: SelectSubset<T, SubdomainOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SubdomainOrders and returns the data updated in the database.
+     * @param {SubdomainOrderUpdateManyAndReturnArgs} args - Arguments to update many SubdomainOrders.
+     * @example
+     * // Update many SubdomainOrders
+     * const subdomainOrder = await prisma.subdomainOrder.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SubdomainOrders and only return the `id`
+     * const subdomainOrderWithIdOnly = await prisma.subdomainOrder.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SubdomainOrderUpdateManyAndReturnArgs>(args: SelectSubset<T, SubdomainOrderUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SubdomainOrder.
+     * @param {SubdomainOrderUpsertArgs} args - Arguments to update or create a SubdomainOrder.
+     * @example
+     * // Update or create a SubdomainOrder
+     * const subdomainOrder = await prisma.subdomainOrder.upsert({
+     *   create: {
+     *     // ... data to create a SubdomainOrder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SubdomainOrder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SubdomainOrderUpsertArgs>(args: SelectSubset<T, SubdomainOrderUpsertArgs<ExtArgs>>): Prisma__SubdomainOrderClient<$Result.GetResult<Prisma.$SubdomainOrderPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SubdomainOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderCountArgs} args - Arguments to filter SubdomainOrders to count.
+     * @example
+     * // Count the number of SubdomainOrders
+     * const count = await prisma.subdomainOrder.count({
+     *   where: {
+     *     // ... the filter for the SubdomainOrders we want to count
+     *   }
+     * })
+    **/
+    count<T extends SubdomainOrderCountArgs>(
+      args?: Subset<T, SubdomainOrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SubdomainOrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SubdomainOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SubdomainOrderAggregateArgs>(args: Subset<T, SubdomainOrderAggregateArgs>): Prisma.PrismaPromise<GetSubdomainOrderAggregateType<T>>
+
+    /**
+     * Group by SubdomainOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SubdomainOrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SubdomainOrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SubdomainOrderGroupByArgs['orderBy'] }
+        : { orderBy?: SubdomainOrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SubdomainOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubdomainOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SubdomainOrder model
+   */
+  readonly fields: SubdomainOrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SubdomainOrder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SubdomainOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SubdomainOrder model
+   */
+  interface SubdomainOrderFieldRefs {
+    readonly id: FieldRef<"SubdomainOrder", 'String'>
+    readonly subdomain: FieldRef<"SubdomainOrder", 'String'>
+    readonly rootDomain: FieldRef<"SubdomainOrder", 'String'>
+    readonly fullDomain: FieldRef<"SubdomainOrder", 'String'>
+    readonly target: FieldRef<"SubdomainOrder", 'String'>
+    readonly recordType: FieldRef<"SubdomainOrder", 'String'>
+    readonly clientName: FieldRef<"SubdomainOrder", 'String'>
+    readonly clientEmail: FieldRef<"SubdomainOrder", 'String'>
+    readonly clientPhone: FieldRef<"SubdomainOrder", 'String'>
+    readonly price: FieldRef<"SubdomainOrder", 'Float'>
+    readonly currency: FieldRef<"SubdomainOrder", 'String'>
+    readonly status: FieldRef<"SubdomainOrder", 'String'>
+    readonly cfRecordId: FieldRef<"SubdomainOrder", 'String'>
+    readonly notes: FieldRef<"SubdomainOrder", 'String'>
+    readonly createdAt: FieldRef<"SubdomainOrder", 'DateTime'>
+    readonly updatedAt: FieldRef<"SubdomainOrder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SubdomainOrder findUnique
+   */
+  export type SubdomainOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter, which SubdomainOrder to fetch.
+     */
+    where: SubdomainOrderWhereUniqueInput
+  }
+
+  /**
+   * SubdomainOrder findUniqueOrThrow
+   */
+  export type SubdomainOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter, which SubdomainOrder to fetch.
+     */
+    where: SubdomainOrderWhereUniqueInput
+  }
+
+  /**
+   * SubdomainOrder findFirst
+   */
+  export type SubdomainOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter, which SubdomainOrder to fetch.
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubdomainOrders to fetch.
+     */
+    orderBy?: SubdomainOrderOrderByWithRelationInput | SubdomainOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubdomainOrders.
+     */
+    cursor?: SubdomainOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubdomainOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubdomainOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubdomainOrders.
+     */
+    distinct?: SubdomainOrderScalarFieldEnum | SubdomainOrderScalarFieldEnum[]
+  }
+
+  /**
+   * SubdomainOrder findFirstOrThrow
+   */
+  export type SubdomainOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter, which SubdomainOrder to fetch.
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubdomainOrders to fetch.
+     */
+    orderBy?: SubdomainOrderOrderByWithRelationInput | SubdomainOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SubdomainOrders.
+     */
+    cursor?: SubdomainOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubdomainOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubdomainOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SubdomainOrders.
+     */
+    distinct?: SubdomainOrderScalarFieldEnum | SubdomainOrderScalarFieldEnum[]
+  }
+
+  /**
+   * SubdomainOrder findMany
+   */
+  export type SubdomainOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter, which SubdomainOrders to fetch.
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SubdomainOrders to fetch.
+     */
+    orderBy?: SubdomainOrderOrderByWithRelationInput | SubdomainOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SubdomainOrders.
+     */
+    cursor?: SubdomainOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SubdomainOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SubdomainOrders.
+     */
+    skip?: number
+    distinct?: SubdomainOrderScalarFieldEnum | SubdomainOrderScalarFieldEnum[]
+  }
+
+  /**
+   * SubdomainOrder create
+   */
+  export type SubdomainOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SubdomainOrder.
+     */
+    data: XOR<SubdomainOrderCreateInput, SubdomainOrderUncheckedCreateInput>
+  }
+
+  /**
+   * SubdomainOrder createMany
+   */
+  export type SubdomainOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SubdomainOrders.
+     */
+    data: SubdomainOrderCreateManyInput | SubdomainOrderCreateManyInput[]
+  }
+
+  /**
+   * SubdomainOrder createManyAndReturn
+   */
+  export type SubdomainOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * The data used to create many SubdomainOrders.
+     */
+    data: SubdomainOrderCreateManyInput | SubdomainOrderCreateManyInput[]
+  }
+
+  /**
+   * SubdomainOrder update
+   */
+  export type SubdomainOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SubdomainOrder.
+     */
+    data: XOR<SubdomainOrderUpdateInput, SubdomainOrderUncheckedUpdateInput>
+    /**
+     * Choose, which SubdomainOrder to update.
+     */
+    where: SubdomainOrderWhereUniqueInput
+  }
+
+  /**
+   * SubdomainOrder updateMany
+   */
+  export type SubdomainOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SubdomainOrders.
+     */
+    data: XOR<SubdomainOrderUpdateManyMutationInput, SubdomainOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which SubdomainOrders to update
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * Limit how many SubdomainOrders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubdomainOrder updateManyAndReturn
+   */
+  export type SubdomainOrderUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * The data used to update SubdomainOrders.
+     */
+    data: XOR<SubdomainOrderUpdateManyMutationInput, SubdomainOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which SubdomainOrders to update
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * Limit how many SubdomainOrders to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubdomainOrder upsert
+   */
+  export type SubdomainOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SubdomainOrder to update in case it exists.
+     */
+    where: SubdomainOrderWhereUniqueInput
+    /**
+     * In case the SubdomainOrder found by the `where` argument doesn't exist, create a new SubdomainOrder with this data.
+     */
+    create: XOR<SubdomainOrderCreateInput, SubdomainOrderUncheckedCreateInput>
+    /**
+     * In case the SubdomainOrder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SubdomainOrderUpdateInput, SubdomainOrderUncheckedUpdateInput>
+  }
+
+  /**
+   * SubdomainOrder delete
+   */
+  export type SubdomainOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+    /**
+     * Filter which SubdomainOrder to delete.
+     */
+    where: SubdomainOrderWhereUniqueInput
+  }
+
+  /**
+   * SubdomainOrder deleteMany
+   */
+  export type SubdomainOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SubdomainOrders to delete
+     */
+    where?: SubdomainOrderWhereInput
+    /**
+     * Limit how many SubdomainOrders to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SubdomainOrder without action
+   */
+  export type SubdomainOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SubdomainOrder
+     */
+    select?: SubdomainOrderSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SubdomainOrder
+     */
+    omit?: SubdomainOrderOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4331,6 +5584,28 @@ export namespace Prisma {
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+  export const SubdomainOrderScalarFieldEnum: {
+    id: 'id',
+    subdomain: 'subdomain',
+    rootDomain: 'rootDomain',
+    fullDomain: 'fullDomain',
+    target: 'target',
+    recordType: 'recordType',
+    clientName: 'clientName',
+    clientEmail: 'clientEmail',
+    clientPhone: 'clientPhone',
+    price: 'price',
+    currency: 'currency',
+    status: 'status',
+    cfRecordId: 'cfRecordId',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SubdomainOrderScalarFieldEnum = (typeof SubdomainOrderScalarFieldEnum)[keyof typeof SubdomainOrderScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -4363,6 +5638,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
@@ -4561,6 +5843,115 @@ export namespace Prisma {
     data?: StringWithAggregatesFilter<"Project"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
+  }
+
+  export type SubdomainOrderWhereInput = {
+    AND?: SubdomainOrderWhereInput | SubdomainOrderWhereInput[]
+    OR?: SubdomainOrderWhereInput[]
+    NOT?: SubdomainOrderWhereInput | SubdomainOrderWhereInput[]
+    id?: StringFilter<"SubdomainOrder"> | string
+    subdomain?: StringFilter<"SubdomainOrder"> | string
+    rootDomain?: StringFilter<"SubdomainOrder"> | string
+    fullDomain?: StringFilter<"SubdomainOrder"> | string
+    target?: StringFilter<"SubdomainOrder"> | string
+    recordType?: StringFilter<"SubdomainOrder"> | string
+    clientName?: StringFilter<"SubdomainOrder"> | string
+    clientEmail?: StringFilter<"SubdomainOrder"> | string
+    clientPhone?: StringNullableFilter<"SubdomainOrder"> | string | null
+    price?: FloatFilter<"SubdomainOrder"> | number
+    currency?: StringFilter<"SubdomainOrder"> | string
+    status?: StringFilter<"SubdomainOrder"> | string
+    cfRecordId?: StringNullableFilter<"SubdomainOrder"> | string | null
+    notes?: StringNullableFilter<"SubdomainOrder"> | string | null
+    createdAt?: DateTimeFilter<"SubdomainOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"SubdomainOrder"> | Date | string
+  }
+
+  export type SubdomainOrderOrderByWithRelationInput = {
+    id?: SortOrder
+    subdomain?: SortOrder
+    rootDomain?: SortOrder
+    fullDomain?: SortOrder
+    target?: SortOrder
+    recordType?: SortOrder
+    clientName?: SortOrder
+    clientEmail?: SortOrder
+    clientPhone?: SortOrderInput | SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    cfRecordId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubdomainOrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    subdomain?: string
+    fullDomain?: string
+    AND?: SubdomainOrderWhereInput | SubdomainOrderWhereInput[]
+    OR?: SubdomainOrderWhereInput[]
+    NOT?: SubdomainOrderWhereInput | SubdomainOrderWhereInput[]
+    rootDomain?: StringFilter<"SubdomainOrder"> | string
+    target?: StringFilter<"SubdomainOrder"> | string
+    recordType?: StringFilter<"SubdomainOrder"> | string
+    clientName?: StringFilter<"SubdomainOrder"> | string
+    clientEmail?: StringFilter<"SubdomainOrder"> | string
+    clientPhone?: StringNullableFilter<"SubdomainOrder"> | string | null
+    price?: FloatFilter<"SubdomainOrder"> | number
+    currency?: StringFilter<"SubdomainOrder"> | string
+    status?: StringFilter<"SubdomainOrder"> | string
+    cfRecordId?: StringNullableFilter<"SubdomainOrder"> | string | null
+    notes?: StringNullableFilter<"SubdomainOrder"> | string | null
+    createdAt?: DateTimeFilter<"SubdomainOrder"> | Date | string
+    updatedAt?: DateTimeFilter<"SubdomainOrder"> | Date | string
+  }, "id" | "subdomain" | "fullDomain">
+
+  export type SubdomainOrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    subdomain?: SortOrder
+    rootDomain?: SortOrder
+    fullDomain?: SortOrder
+    target?: SortOrder
+    recordType?: SortOrder
+    clientName?: SortOrder
+    clientEmail?: SortOrder
+    clientPhone?: SortOrderInput | SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    cfRecordId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SubdomainOrderCountOrderByAggregateInput
+    _avg?: SubdomainOrderAvgOrderByAggregateInput
+    _max?: SubdomainOrderMaxOrderByAggregateInput
+    _min?: SubdomainOrderMinOrderByAggregateInput
+    _sum?: SubdomainOrderSumOrderByAggregateInput
+  }
+
+  export type SubdomainOrderScalarWhereWithAggregatesInput = {
+    AND?: SubdomainOrderScalarWhereWithAggregatesInput | SubdomainOrderScalarWhereWithAggregatesInput[]
+    OR?: SubdomainOrderScalarWhereWithAggregatesInput[]
+    NOT?: SubdomainOrderScalarWhereWithAggregatesInput | SubdomainOrderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    subdomain?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    rootDomain?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    fullDomain?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    target?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    recordType?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    clientName?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    clientEmail?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    clientPhone?: StringNullableWithAggregatesFilter<"SubdomainOrder"> | string | null
+    price?: FloatWithAggregatesFilter<"SubdomainOrder"> | number
+    currency?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    status?: StringWithAggregatesFilter<"SubdomainOrder"> | string
+    cfRecordId?: StringNullableWithAggregatesFilter<"SubdomainOrder"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"SubdomainOrder"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SubdomainOrder"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SubdomainOrder"> | Date | string
   }
 
   export type TaskCreateInput = {
@@ -4765,6 +6156,139 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     messages?: StringFieldUpdateOperationsInput | string
     data?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubdomainOrderCreateInput = {
+    id?: string
+    subdomain: string
+    rootDomain?: string
+    fullDomain: string
+    target: string
+    recordType?: string
+    clientName: string
+    clientEmail: string
+    clientPhone?: string | null
+    price?: number
+    currency?: string
+    status?: string
+    cfRecordId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SubdomainOrderUncheckedCreateInput = {
+    id?: string
+    subdomain: string
+    rootDomain?: string
+    fullDomain: string
+    target: string
+    recordType?: string
+    clientName: string
+    clientEmail: string
+    clientPhone?: string | null
+    price?: number
+    currency?: string
+    status?: string
+    cfRecordId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SubdomainOrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    rootDomain?: StringFieldUpdateOperationsInput | string
+    fullDomain?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cfRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubdomainOrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    rootDomain?: StringFieldUpdateOperationsInput | string
+    fullDomain?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cfRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubdomainOrderCreateManyInput = {
+    id?: string
+    subdomain: string
+    rootDomain?: string
+    fullDomain: string
+    target: string
+    recordType?: string
+    clientName: string
+    clientEmail: string
+    clientPhone?: string | null
+    price?: number
+    currency?: string
+    status?: string
+    cfRecordId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SubdomainOrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    rootDomain?: StringFieldUpdateOperationsInput | string
+    fullDomain?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cfRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SubdomainOrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subdomain?: StringFieldUpdateOperationsInput | string
+    rootDomain?: StringFieldUpdateOperationsInput | string
+    fullDomain?: StringFieldUpdateOperationsInput | string
+    target?: StringFieldUpdateOperationsInput | string
+    recordType?: StringFieldUpdateOperationsInput | string
+    clientName?: StringFieldUpdateOperationsInput | string
+    clientEmail?: StringFieldUpdateOperationsInput | string
+    clientPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    cfRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4988,6 +6512,98 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type SubdomainOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    subdomain?: SortOrder
+    rootDomain?: SortOrder
+    fullDomain?: SortOrder
+    target?: SortOrder
+    recordType?: SortOrder
+    clientName?: SortOrder
+    clientEmail?: SortOrder
+    clientPhone?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    cfRecordId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubdomainOrderAvgOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type SubdomainOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    subdomain?: SortOrder
+    rootDomain?: SortOrder
+    fullDomain?: SortOrder
+    target?: SortOrder
+    recordType?: SortOrder
+    clientName?: SortOrder
+    clientEmail?: SortOrder
+    clientPhone?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    cfRecordId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubdomainOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    subdomain?: SortOrder
+    rootDomain?: SortOrder
+    fullDomain?: SortOrder
+    target?: SortOrder
+    recordType?: SortOrder
+    clientName?: SortOrder
+    clientEmail?: SortOrder
+    clientPhone?: SortOrder
+    price?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    cfRecordId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SubdomainOrderSumOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -5060,6 +6676,14 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProjectsInput, UserUpdateWithoutProjectsInput>, UserUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -5194,6 +6818,33 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type ProjectCreateWithoutUserInput = {

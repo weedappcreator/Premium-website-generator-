@@ -43,3 +43,22 @@ model Project {
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model SubdomainOrder {
+  id          String   @id @default(cuid())
+  subdomain   String   @unique
+  rootDomain  String   @default("weedkerwing.dev")
+  fullDomain  String   @unique
+  target      String
+  recordType  String   @default("CNAME")
+  clientName  String
+  clientEmail String
+  clientPhone String?
+  price       Float    @default(500)
+  currency    String   @default("RD$")
+  status      String   @default("pending")
+  cfRecordId  String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
