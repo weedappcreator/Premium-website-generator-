@@ -14,7 +14,7 @@ export default async function ExerciseDetailPage({
 
   if (!exercise) notFound();
 
-  const secondaryMuscles: string[] = JSON.parse(exercise.secondaryMuscles || "[]");
+  const secondaryMuscles: string[] = (exercise.secondaryMuscles as string[]) || [];
   const instructions = exercise.instructions.split("\n").filter(Boolean);
 
   return (

@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Task {
@@ -73,7 +73,7 @@ model Exercise {
   equipment        String
   target           String
   muscleGroup      String
-  secondaryMuscles String   @default("[]")
+  secondaryMuscles Json   @default("[]")
   instructions     String
   image            String?
   gifUrl           String?
