@@ -70,3 +70,7 @@ logs.txt
 .generated/
 *.db
 *.db-journal
+
+# Generated data
+prisma/exercises.json
+tsconfig.tsbuildinfo
